@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f3eee4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f130f" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="冲煮台">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="description" content="Mars 的个人咖啡冲煮台。五支豆、二十套方案，外加新杯对比。清晰的水温、累计粉水比、独立研磨设置与杯中反馈。">
+  <title>Mars 咖啡冲煮台</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css?v=v3-2026-11-03">
+</head>
+<body>
+  <noscript><p class="noscript">这个冲煮台需要运行 JavaScript。如果你是在聊天附件的预览里看到这一行，请点右上角的分享按钮，选择“在 Safari 中打开”，或者直接访问网页地址。</p></noscript>
+  <header class="masthead">
+    <a class="brand" href="./" aria-label="Mars 咖啡冲煮台首页"><span class="brand-mark">m<span>·</span></span><span>MARS <span class="brand-cn">咖啡冲煮台</span><small>每天好一点点</small></span></a>
+    <nav><span class="equipment"><i></i> Switch 03 · ZP6 · X-pro</span><button class="text-button" data-jump="comparePanel">新杯对比</button><button class="text-button" id="historyButton">冲煮记录 <span id="recordCount">0</span></button></nav>
+  </header>
+  <main class="shell">
+    <section class="intro">
+      <div><p class="eyebrow">冲煮台 · 私人冲煮笔记</p><h1>选好豆子，<em>冲好这一杯。</em></h1><p class="intro-copy" id="recipeCount">五支豆，二十套方案。从你已经喝到的好味道，继续往前。</p></div>
+      <div class="intro-aside"><span class="sun"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="16" cy="16" r="5.5"/><path d="M16 3.5v3M16 25.5v3M3.5 16h3M25.5 16h3M7.2 7.2l2.1 2.1M22.7 22.7l2.1 2.1M7.2 24.8l2.1-2.1M22.7 9.3l2.1-2.1"/></svg></span><p>昆明 · 沸点约 93°C<small>X-pro 精确控温，最高约 93°C</small></p></div>
+    </section>
+    <section class="today-strip" id="todayStrip" aria-label="今日状态"></section>
+    <div class="workspace">
+      <div class="recipe-column">
+        <section class="panel select-panel">
+          <div class="section-heading"><h2><span>01</span> 今天冲哪支豆？</h2><span class="muted tiny">选择豆子和冲法</span></div>
+          <div id="beans" class="beans" role="group" aria-label="选择咖啡豆"></div>
+          <div id="modes" class="modes" role="group" aria-label="选择冲煮方法"></div>
+          <div id="recipeHeading" class="recipe-heading"></div>
+          <div id="restRow" class="rest-row"></div>
+          <div id="temperatureCard" class="water-temperature" aria-live="polite"></div>
+          <div class="metrics" id="metrics"></div>
+          <details class="fine-tune" id="fineTune">
+            <summary>调整这一套配方 <span>粉量 · 研磨</span><b aria-hidden="true"></b></summary>
+            <div class="tune-grid">
+              <label>粉量 <span>g</span><input id="doseInput" type="number" min="5" max="45" step="1" inputmode="decimal"></label>
+              <label>ZP6 刻度<div class="stepper"><button data-grind="-0.1" aria-label="磨细一格">−</button><input id="grindInput" aria-label="ZP6 刻度" type="number" min="0.1" max="9" step="0.1" inputmode="decimal"><button data-grind="0.1" aria-label="磨粗一格">＋</button></div></label>
+            </div>
+            <p class="tiny muted">水与冰按粉量等比例换算；时间不自动缩放。改动只影响当前配方。一次只改一项：研磨每次 0.2。</p>
+            <button class="text-button" id="restoreRecipe">恢复这套归档参数</button>
+          </details>
+          <p id="statusNote" class="status-note"></p>
+        </section>
+        <section class="panel steps-panel">
+          <div class="section-heading"><h2><span>02</span> 跟着节奏冲</h2><button class="text-button" id="printButton" aria-label="打印当前冲煮卡">打印卡片</button></div>
+          <div id="timeline" class="timeline" aria-label="注水与阀门时间轴"></div>
+          <p class="tiny muted axis-note"><span class="legend-dot"></span>注水区间 <span class="valve-legend"></span>关阀浸泡 <span>每段显示累计粉水比与克重，投水比不含分享壶冰</span></p>
+          <ol id="steps" class="steps"></ol>
+          <div class="reference-end" id="referenceEnd"></div>
+        </section>
+        <details class="panel prep-panel">
+          <summary><span>开冲前的小检查</span><span class="muted tiny">预热 · 去皮 · 阀门</span></summary>
+          <div class="prep-grid"><p><b>01</b>充分预热滤杯，润湿滤纸后倒掉预热水。</p><p><b>02</b>称粉研磨，铺平粉床，确认起始阀门。</p><p><b>03</b>冰冲先把冰放进分享壶。整套放上秤后去皮。</p><p><b>04</b>按当前配方水温准备注水。水温指开始注水时的壶内温度；第一滴落下时，点击开始。</p></div>
+        </details>
+      </div>
+      <aside class="brew-column">
+        <section class="focus-card" id="focusCard">
+          <div class="focus-top"><span id="timerState">准备冲煮</span><button id="soundButton" class="sound-button" aria-pressed="true">提示音 开</button></div>
+          <div class="timer" id="timer" role="timer" aria-label="冲煮计时">00:00</div>
+          <div class="timer-caption" id="timerCaption">第一滴水落下时，点击开始</div>
+          <div class="progress" aria-hidden="true"><i></i></div>
+          <p class="focus-temperature" id="currentTemperature"></p>
+          <div class="focus-divider"></div>
+          <div class="current-step-label"><span id="currentIndex">准备开始</span><span id="valveBadge" class="valve-badge">全程开阀</span></div>
+          <h3 id="currentAction">注入第一段水</h3>
+          <p class="ratio-caption">累计粉水比 · 对照电子秤</p>
+          <div class="target-weight ratio-target"><span id="currentRatio">1:3</span><span class="target-unit"><span id="currentWater">54</span> g<small>累计注水，不含冰</small></span></div>
+          <p class="pour-deadline" id="pourDeadline">0:10 前注完</p>
+          <div class="next-step" id="nextStep"></div>
+          <div class="timer-controls"><button id="startButton" class="start-button">开始冲煮 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg></button><button id="resetButton" class="reset-button" disabled aria-label="重置计时器"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 12a8.5 8.5 0 1 0 2.6-6.1"/><path d="M3.5 4v5h5"/></svg></button></div>
+          <button class="finish-button" id="finishButton" hidden>粉面积水消失，完成本杯</button>
+          <p class="focus-note" id="wakeNote">计时结束由你确认，参考秒数不决定好喝与否。</p>
+        </section>
+        <section class="taste-card"><p class="eyebrow">杯中线索</p><h3 id="tasteTitle">香气、甜感，还有果汁感。</h3><p id="tasteDescription"></p><div id="tasteStatus"></div></section>
+        <section class="suggest-card" id="suggestCard"></section>
+        <section class="local-note"><span class="leaf-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14z"/><path d="M5 19c3-4 6-7 10-9"/></svg></span><p>每杯留下一个小发现。<small>记录保存在当前浏览器，可随时导出备份，换设备或换打开方式前先导出。</small></p></section>
+      </aside>
+    </div>
+    <section class="panel records-panel" id="recordsPanel">
+      <div class="section-heading"><h2><span>03</span> 杯中记录</h2><div class="record-actions"><button class="text-button" id="filterButton" aria-pressed="false">只看当前方案</button><button class="text-button" id="importButton">导入</button><button class="text-button" id="exportButton">导出备份 ↗</button></div></div>
+      <div id="records"></div>
+    </section>
+    <section class="panel compare-panel" id="comparePanel"><div class="section-heading"><h2><span>04</span> 新杯对比</h2><span class="muted tiny">瑰夏 · Switch 03 对 清庭平底</span></div><div id="compareBody"></div></section>
+    <details class="panel gear-panel" id="gearPanel"><summary><span>05 · 我的器具</span><span class="muted tiny">水壶 · 磨豆机 · 滤杯 · 滤纸</span></summary><div id="gearBody"></div></details>
+    <footer><span>MARS · 冲煮台</span><p>配方以原归档为起点。2026-11-03 更新：按实测标注每套方案的状态，新增清庭平底对比杯，加入味道评分和一次只改一项的建议。实测反馈不自动推广到其他冲法。</p><button class="text-button" id="allRecipesButton">查看全部参数</button></footer>
+  </main>
+  <dialog id="feedbackDialog">
+    <form id="feedbackForm">
+      <div class="dialog-heading"><p class="eyebrow">一杯一记</p><button type="button" class="close-button" data-close="feedbackDialog" aria-label="关闭">×</button></div>
+      <h2>这一杯，喝起来怎么样？</h2><p id="feedbackSummary" class="muted"></p>
+      <label class="field-label">粉面积水消失的时间<input id="finishTime" placeholder="例如 2:10" pattern="[0-9]{1,2}:[0-5][0-9]" required inputmode="text"></label>
+      <div class="scale-block"><p class="field-label-text">六项味道（可跳过，1 弱 5 强）</p><div id="scaleRows"></div></div>
+      <label class="field-label">杯标（盲测可选）<input id="blindLabel" placeholder="例如 A" maxlength="6" class="short-input"></label>
+      <div class="feedback-tags" id="feedbackTags"><button type="button" data-taste="甜感好">甜感好</button><button type="button" data-taste="香气明显">香气明显</button><button type="button" data-taste="有果汁感">有果汁感</button><button type="button" data-taste="偏酸偏薄">偏酸偏薄</button><button type="button" data-taste="尾苦明显">尾苦明显</button><button type="button" data-taste="发干发涩">发干发涩</button></div>
+      <label class="field-label">留一句给下一杯<textarea id="feedbackText" rows="3" maxlength="1000" placeholder="可以记下冷却后的味道、用水和养豆天数……"></textarea></label>
+      <p class="tiny muted">这里保存你的观察，不会自动修改其他配方。</p><button class="primary" type="submit">保存这一杯</button>
+    </form>
+  </dialog>
+  <dialog id="allRecipesDialog"><div class="dialog-heading"><p class="eyebrow">配方索引</p><button class="close-button" data-close="allRecipesDialog" aria-label="关闭">×</button></div><h2 id="recipeIndexTitle">二十套，分别校准。</h2><p class="muted tiny">刚沸指当地沸点，昆明约 93°C，不是统一 100°C。水温指开始注水时的壶内温度；各段使用同壶水，不要求中途重新加热。点击一行查看具体依据。</p><div class="table-wrap"><table><thead><tr><th>豆子 / 冲法</th><th>粉 / 热水 / 冰 g</th><th>注水水温</th><th>ZP6</th><th>状态</th></tr></thead><tbody id="allRecipes"></tbody></table></div></dialog>
+  <input id="importFile" type="file" accept="application/json,.json" hidden>
+  <div id="toast" class="toast" role="status"></div>
+  <button id="miniBar" class="mini-bar" hidden aria-label="回到计时卡"></button>
+  <nav class="tabbar" id="tabbar" aria-label="快速跳转"><button type="button" data-tab="select" class="on"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 11h13v5a5 5 0 0 1-5 5h-3a5 5 0 0 1-5-5z"/><path d="M18.5 12h1.5a2.7 2.7 0 0 1 0 5.4h-1.8"/><path d="M9.5 4.5v3M14 4v3.5"/></svg>方案</button><button type="button" data-tab="focusCard"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="15.5" r="8"/><path d="M14 15.5V10.5M11 4h6M21 8l1.5-1.5"/></svg>计时</button><button type="button" data-tab="recordsPanel"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="4" width="17" height="20" rx="3.5"/><path d="M10 10h8M10 14.5h8M10 19h4.5"/></svg>记录</button><button type="button" data-tab="comparePanel"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5v18M7 8.5h14M9 23h10"/><path d="M7 8.5 3.8 15a3.4 3.4 0 0 0 6.4 0zM21 8.5 17.8 15a3.4 3.4 0 0 0 6.4 0z"/></svg>对比</button></nav>
+  <script src="recipes.js?v=v3-2026-11-03"></script><script src="app.js?v=v3-2026-11-03"></script>
+  <script>if("serviceWorker"in navigator&&/^https?:$/.test(location.protocol)){addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}</script>
+</body>
+</html>
