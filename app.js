@@ -34,7 +34,7 @@ return out.sort((a,b)=>a.at-b.at);
 function render(){
 const r=recipe(),b=bean(),a=amounts(),m=mode(),locked=busy(),v=singleVerified();
 $('beans').innerHTML=DATA.beans.map(x=>'<button class="bean '+(x.id===r.bean?'active':'')+'" data-bean="'+x.id+'" aria-pressed="'+(x.id===r.bean)+'" '+(locked?'disabled':'')+'><span class="bean-glyph" aria-hidden="true"></span><b>'+esc(x.short)+'</b><small>'+esc(x.country||'')+'</small></button>').join('');
-$('recipeCount').textContent='五支豆，二十套方案，外加清庭平底对比杯和 v2 探索。从你已经喝到的好味道，继续往前。';
+$('recipeCount').textContent='五支豆，二十套方案，外加 Switch 03 对三旋空山文的对照和 v2 探索。从你已经喝到的好味道，继续往前。';
 $('allRecipesButton').textContent='查看全部参数与状态';
 $('recipeIndexTitle').textContent='二十套，分别校准。';
 $('modes').innerHTML=DATA.modes.filter(x=>!x.hidden).map(x=>'<button class="mode '+(x.id===r.mode?'active':'')+'" data-mode="'+x.id+'" aria-pressed="'+(x.id===r.mode)+'" '+(locked?'disabled':'')+'>'+esc(x.name)+'</button>').join('');
@@ -114,14 +114,14 @@ $('restoreRecipe').onclick=()=>{if(!busy()){delete state.configs[state.selected]
 $('startButton').onclick=()=>{unlockAudio();if(!state.timer){state.timer={acc:0,start:Date.now()};fired=new Set();beep(true);}else if(state.timer.start===null){state.timer.start=Date.now();}else{state.timer.acc=elapsed();state.timer.start=null;releaseWake();}persist();render();if(state.timer.start!==null)keepAwake();};
 $('resetButton').onclick=()=>{state.timer=null;fired=new Set();persist();releaseWake();render();toast('计时已重置，配方保留');};
 $('soundButton').onclick=()=>{state.sound=!state.sound;unlockAudio();if(state.sound)beep(false);persist();updateTimer();};
-$('finishButton').onclick=()=>{const sec=Math.floor(elapsed());if(state.timer.start!==null){state.timer.acc=elapsed();state.timer.start=null;}pending={recipe:state.selected,...amounts(),seconds:sec,date:new Date().toISOString()};releaseWake();persist();updateTimer();$('finishTime').value=clock(sec);$('feedbackText').value='';tags=new Set();scale={};document.querySelectorAll('[data-taste]').forEach(el=>el.classList.remove('active'));document.querySelectorAll('[data-scale]').forEach(el=>el.classList.remove('on'));$('blindLabel').value='';$('feedbackSummary').textContent=bean().name+' · '+mode().name+' · '+(recipe().dripper==='qt'?'清庭平底 · ':'')+pending.dose+' g / '+pending.water+' g · ZP6 '+pending.grind.toFixed(1);$('feedbackDialog').showModal();};
+$('finishButton').onclick=()=>{const sec=Math.floor(elapsed());if(state.timer.start!==null){state.timer.acc=elapsed();state.timer.start=null;}pending={recipe:state.selected,...amounts(),seconds:sec,date:new Date().toISOString()};releaseWake();persist();updateTimer();$('finishTime').value=clock(sec);$('feedbackText').value='';tags=new Set();scale={};document.querySelectorAll('[data-taste]').forEach(el=>el.classList.remove('active'));document.querySelectorAll('[data-scale]').forEach(el=>el.classList.remove('on'));$('blindLabel').value='';$('feedbackSummary').textContent=bean().name+' · '+mode().name+' · '+(recipe().dripper==='qt'?'三旋空山文 · ':'')+pending.dose+' g / '+pending.water+' g · ZP6 '+pending.grind.toFixed(1);$('feedbackDialog').showModal();};
 $('feedbackForm').onsubmit=e=>{e.preventDefault();if(!pending)return;const val=$('finishTime').value.trim(),m=val.match(/^(\d{1,2}):([0-5]\d)$/);if(!m){toast('时间请填分:秒，例如 2:10');return;}const sec=Number(m[1])*60+Number(m[2]);if(sec>7200){toast('请核对完成时间');return;}const r={...pending,id:typeof crypto.randomUUID==='function'?crypto.randomUUID():Date.now()+'-'+Math.random().toString(16).slice(2),seconds:sec,tags:Array.from(tags),note:$('feedbackText').value.trim().slice(0,1000),taste:Object.keys(scale).length?{...scale}:undefined,blind:$('blindLabel').value.trim().slice(0,6)||undefined,temp:temperatureText(recipe()),dripper:recipe().dripper||'sw'};delete r.factor;r.next=makeNext(r);state.records.unshift(r);state.records=state.records.slice(0,1000);state.timer=null;pending=null;persist();$('feedbackDialog').close();render();toast('这一杯已记录，配方保持不变');};
-function dripperName(r){return r.dripper==='qt'?'清庭 三旋空 山文平底杯 280 ml · NANO 莱赛尔高流速 185 蛋糕滤纸':'Hario Switch 03 · V60-03 滤纸';}
+function dripperName(r){return r.dripper==='qt'?'清庭三旋空山文 280 ml · NANO 185 波浪滤纸':'Hario Switch 03 · V60-03 滤纸';}
 function statusInfo(r){const s=r.status||{kind:'u',cups:0};return s.kind==='m'?{cls:'measured',text:'已实测（'+s.cups+' 杯）'}:s.kind==='p'?{cls:'tentative',text:'暂定'}:{cls:'untested',text:'未测试'};}
 function grindSub(r,a){const moved=Math.abs(a.grind-r.grind)>0.001;const pre=moved?'已改动 · ':'';
  if(r.mode==='flat')return pre+'可选探索 · 只比 11-03 那杯细 0.2';
  if(r.id==='gesha-cmp-qt')return pre+'11-03 已冲 · 干点 1:30 · 好喝';
- if(r.mode.indexOf('cmp')===0)return pre+'沿用瑰夏纯热 4.2 · 新杯未实测';
+ if(r.mode.indexOf('cmp')===0)return pre+'沿用瑰夏纯热 4.2 · 对照杯未实测';
  if(r.id==='gesha-pure')return pre+'已实测 · 唯一实测的刻度';
  if(r.status.kind==='m')return pre+'已冲 '+r.status.cups+' 杯 · 手册基线 '+(r.baseline!=null?r.baseline.toFixed(1):'无');
  if(r.baseline!=null)return pre+'起点 · 含 −0.4 偏移，未验证 · 手册 '+r.baseline.toFixed(1);
@@ -138,8 +138,8 @@ function renderRest(){const b=bean(),i=restInfo(b);
 function renderToday(){const al=DATA.beans.find(x=>x.id==='alo-light'),i=restInfo(al);const chips=[];
  if(i)chips.push('<button class="today-chip '+i.tone+'" data-recipe-go="alo-light-pure"><span>Alo 浅焙</span><b>第 '+i.n+' 天</b><small>'+esc(i.txt)+'</small></button>');
  const cs=state.records.filter(x=>x.recipe==='gesha-cmp-sw').length,cq=state.records.filter(x=>x.recipe==='gesha-cmp-qt').length+DATA.history.filter(x=>x.recipe==='gesha-cmp-qt').length;
- chips.push('<button class="today-chip" data-jump="comparePanel"><span>新杯对比</span><b>'+(cs&&cq?'两杯都冲了':cs||cq?'冲了一杯':'待冲')+'</b><small>清庭平底 11-03 已冲一杯 · 干点 1:30</small></button>');
- chips.push('<button class="today-chip" data-jump="notesPanel"><span>平底杯笔记</span><b>评杯与酸甜</b><small>评分标准和可选探索</small></button>');
+ chips.push('<button class="today-chip" data-jump="comparePanel"><span>Switch 03 对三旋空山文</span><b>'+(cs&&cq?'两杯都冲了':cs||cq?'冲了一杯':'待冲')+'</b><small>三旋空山文 11-03 已冲一杯 · 干点 1:30</small></button>');
+ chips.push('<button class="today-chip" data-jump="notesPanel"><span>三旋空山文笔记</span><b>评杯与酸甜</b><small>评分标准和可选探索</small></button>');
  const m=DATA.recipes.filter(x=>x.mode.indexOf('cmp')!==0&&x.mode!=='flat'&&x.status.kind==='m').length;
  chips.push('<button class="today-chip" id="todayAll"><span>已实测的方案</span><b>'+m+' / 20</b><small>其余是起点或暂定，见全部参数</small></button>');
  $('todayStrip').innerHTML='<p class="eyebrow">今日 · '+todayStr()+'</p><div class="today-grid">'+chips.join('')+'</div>';}
@@ -181,26 +181,26 @@ function renderCompare(){
  const sw=DATA.recipes.find(x=>x.id==='gesha-cmp-sw'),qt=DATA.recipes.find(x=>x.id==='gesha-cmp-qt');
  const L=id=>state.records.find(x=>x.recipe===id)||DATA.history.find(x=>x.recipe===id),ls=L(sw.id),lq=L(qt.id);
  const row=(k,a,b)=>'<tr><th>'+k+'</th><td>'+a+'</td><td>'+b+'</td></tr>';
- let t='<table class="cmp-table"><thead><tr><th></th><th>Switch 03</th><th>清庭平底</th></tr></thead><tbody>'+
-  row('滤杯','Hario Switch 03，360 ml','清庭 三旋空 山文平底杯，280 ml')+
-  row('滤纸','Hario V60-03','NANO 莱赛尔 高流速 185 蛋糕滤纸')+
+ let t='<table class="cmp-table"><thead><tr><th></th><th>Switch 03</th><th>三旋空山文</th></tr></thead><tbody>'+
+  row('滤杯','Hario Switch 03，360 ml','清庭三旋空山文，280 ml')+
+  row('滤纸','Hario V60-03','NANO 莱赛尔高流速 185 波浪滤纸')+
   row('粉 / 水','15 g / 248 g · 1:16.5','15 g / 248 g · 1:16.5')+
   row('ZP6 · 水温','4.2 · 沸水约 93°C','4.2 · 沸水约 93°C')+
   row('阀门','全程开','全程开（推断）')+'</tbody></table>';
- t+='<table class="cmp-table cmp-result"><thead><tr><th>结果</th><th>Switch 03</th><th>清庭平底</th></tr></thead><tbody>'+
+ t+='<table class="cmp-table cmp-result"><thead><tr><th>结果</th><th>Switch 03</th><th>三旋空山文</th></tr></thead><tbody>'+
   row('干点',ls&&ls.seconds!=null?clock(ls.seconds):'未冲',lq&&lq.seconds!=null?clock(lq.seconds):'未冲');
  if(ls&&ls.blind||lq&&lq.blind)t+=row('杯标',esc((ls&&ls.blind)||'无'),esc((lq&&lq.blind)||'无'));
  ALLSC.forEach(([k,n])=>{const a=ls&&ls.taste&&ls.taste[k],b=lq&&lq.taste&&lq.taste[k];if(a||b)t+=row(n,a?scaleDots(a):'未评',b?scaleDots(b):'未评');});
  if(ls&&ls.note||lq&&lq.note)t+=row('笔记',esc((ls&&ls.note)||''),esc((lq&&lq.note)||''));
  t+='</tbody></table>';
  let verdict='';
- if(ls&&lq){const bits=[];if(ls.seconds!=null&&lq.seconds!=null){const d=lq.seconds-ls.seconds;bits.push(d===0?'干点相同':'清庭干点比 Switch 03 '+(d>0?'晚':'早')+' '+Math.abs(d)+' 秒');}
+ if(ls&&lq){const bits=[];if(ls.seconds!=null&&lq.seconds!=null){const d=lq.seconds-ls.seconds;bits.push(d===0?'干点相同':'三旋空山文干点比 Switch 03 '+(d>0?'晚':'早')+' '+Math.abs(d)+' 秒');}
   ALLSC.forEach(([k,n])=>{const a=ls.taste&&ls.taste[k],b=lq.taste&&lq.taste[k];if(a&&b&&a!==b)bits.push(n+' '+(b>a?'+':'−')+Math.abs(b-a));});
-  verdict='<p class="cmp-verdict"><b>差别（清庭相对 Switch 03）：</b>'+esc(bits.length?bits.join('，'):'没有明显差别')+'。推断：这是“杯加滤纸”整套的差别，不能全算在杯型上。</p>';}
+  verdict='<p class="cmp-verdict"><b>差别（三旋空山文相对 Switch 03）：</b>'+esc(bits.length?bits.join('，'):'没有明显差别')+'。推断：这是“杯加滤纸”整套的差别，不能全算在杯型上。</p>';}
  else verdict='<p class="cmp-verdict muted">两杯都冲完以后，这里会列出干点和评分的差别。</p>';
- const notes=['<li><b>读法：</b>清庭这杯是好咖啡。花果香更清晰，酸甜苦平衡，只是甜感比 Switch 基线略低。差别可能来自萃取率或水流速度，没有测过，不要当成缺点。</li>','<li><b>推断：</b>高流速莱赛尔纸让滤水更快，所以干点 1:30 比普通平底杯早。滤纸和 Switch 03 的 V60-03 纸不同，比较的是“杯加纸”整套。</li>','<li><b>分段注水不会溢出。</b>只有关阀全浸泡，才要看 280 ml 的容量。</li>','<li><b>盲测：</b>让别人把两杯倒进编号一样的杯子，你不看杯标打分，记录时填杯标，最后揭晓。60°C、40°C、室温各尝一次。</li>','<li><b>一次只比一个差别。</b>粉水、研磨、水温、注水节奏，一次只动一项。</li>'];
- const lede=lq?'<p class="cmp-lede">清庭平底 11-03 已冲一杯：干点 '+(lq.seconds!=null?clock(lq.seconds):'未计时')+'，花果香更清晰，整体平衡，甜感略低于 Switch。Switch 03 同参数那杯还没冲。</p>':'<p class="cmp-lede">同一包瑰夏，同样的 15 g / 248 g、ZP6 4.2、沸水。两杯都还没有冲。</p>';
- $('compareBody').innerHTML=lede+t+verdict+'<div class="cmp-actions"><button class="start-btn" data-pick="gesha-cmp-sw">冲 Switch 03 这杯</button><button class="start-btn" data-pick="gesha-flat-v2">清庭 v2 · 可选探索 ZP6 4.0</button></div><ul class="cmp-notes">'+notes.join('')+'</ul>';}
+ const notes=['<li><b>读法：</b>三旋空山文这杯是好咖啡。花果香更清晰，酸甜苦平衡，只是甜感比 Switch 03 基线略低。差别可能来自萃取率或水流速度，没有测过，不要当成缺点。</li>','<li><b>推断：</b>高流速莱赛尔纸让滤水更快，所以干点 1:30 比预期早；第三段比计划早结束、每段之间粉床都滤空，说明决定干点的是粉床阻力（NANO 185、三旋空空心底、研磨 4.2），不是注水节奏。滤纸和 Switch 03 的 V60-03 纸不同，比较的是“杯加纸”整套。</li>','<li><b>分段注水不会溢出。</b>只有关阀全浸泡，才要看 280 ml 的容量。</li>','<li><b>盲测：</b>让别人把两杯倒进编号一样的杯子，你不看杯标打分，记录时填杯标，最后揭晓。60°C、40°C、室温各尝一次。</li>','<li><b>一次只比一个差别。</b>粉水、研磨、水温、注水节奏，一次只动一项。</li>'];
+ const lede=lq?'<p class="cmp-lede">三旋空山文 11-03 已冲一杯：干点 '+(lq.seconds!=null?clock(lq.seconds):'未计时')+'，花果香更清晰，整体平衡，甜感略低于 Switch 03。Switch 03 同参数那杯还没冲。</p>':'<p class="cmp-lede">同一包瑰夏，同样的 15 g / 248 g、ZP6 4.2、沸水。两杯都还没有冲。</p>';
+ $('compareBody').innerHTML=lede+t+verdict+'<div class="cmp-actions"><button class="start-btn" data-pick="gesha-cmp-sw">冲 Switch 03 这杯</button><button class="start-btn" data-pick="gesha-flat-v2">三旋空山文 v2 · 可选探索 ZP6 4.0</button></div><ul class="cmp-notes">'+notes.join('')+'</ul>';}
 function renderGear(){$('gearBody').innerHTML='<dl class="gear-list">'+DATA.gear.map(g=>'<div><dt>'+esc(g[0])+'</dt><dd>'+esc(g[1])+'</dd></div>').join('')+'</dl>';}
 function renderRecords(){
  $('recordCount').textContent=state.records.length;const r0=recipe();
@@ -211,7 +211,7 @@ function renderRecords(){
  $('records').innerHTML=(!state.records.length?'<div class="empty-record">下一杯的进步，藏在这一杯的记录里。<small>完成计时后可以记下强度和品质印象评分。下面是你已有的历史实测。</small></div>':'')+(list.length?list.map(rec=>{const rr=DATA.recipes.find(x=>x.id===rec.recipe),bb=DATA.beans.find(x=>x.id===rr.bean),mm=DATA.modes.find(x=>x.id===rr.mode),dt=new Date(rec.date);
   const when=rec.reference?'<b>'+String(dt.getMonth()+1).padStart(2,'0')+'.'+String(dt.getDate()).padStart(2,'0')+'</b>历史实测'+(rec.dateNote?'<br>'+esc(rec.dateNote):''):'<b>'+String(dt.getMonth()+1).padStart(2,'0')+'.'+String(dt.getDate()).padStart(2,'0')+'</b>'+dt.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',hour12:false});
   const sec=Number.isFinite(rec.seconds)&&rec.seconds!=null?clock(rec.seconds):esc(rec.timeText||'未计时');
-  const meta=[rec.dose+' g / '+rec.water+' g'+(rec.ice?' + 冰 '+rec.ice+' g':''),'ZP6 '+Number(rec.grind).toFixed(1)];if(rec.temp)meta.push(rec.temp);if(rec.dripper==='qt')meta.push('清庭平底');if(rec.blind)meta.push('杯标 '+rec.blind);
+  const meta=[rec.dose+' g / '+rec.water+' g'+(rec.ice?' + 冰 '+rec.ice+' g':''),'ZP6 '+Number(rec.grind).toFixed(1)];if(rec.temp)meta.push(rec.temp);if(rec.dripper==='qt')meta.push('三旋空山文');if(rec.blind)meta.push('杯标 '+rec.blind);
   const sc=rec.taste?'<div class="rec-scale">'+ALLSC.filter(([k])=>rec.taste[k]).map(([k,n])=>'<span>'+n+scaleDots(rec.taste[k])+'</span>').join('')+'</div>':'';
   const df=rec.reference?'':diffText(rec);
   return '<article class="record'+(rec.reference?' reference':'')+'"><div class="record-date">'+when+'</div><div><h3>'+esc(bb.name)+' · '+esc(mm.name)+'</h3><div class="record-meta">'+esc(meta.join(' · '))+'</div>'+(rec.tags&&rec.tags.length?'<div class="record-tags">'+rec.tags.map(t=>'<span>'+esc(t)+'</span>').join('')+'</div>':'')+sc+(rec.note?'<p class="record-notes">'+esc(rec.note)+'</p>':'')+(df?'<p class="record-diff">'+esc(df)+'</p>':'')+(rec.next?'<p class="record-next"><b>建议</b>'+esc(rec.next)+'</p>':'')+'</div><div class="record-time">'+sec+'<small>'+(Number.isFinite(rec.seconds)&&rec.seconds!=null?'粉面积水消失':'没有精确计时')+'</small>'+(rec.reference?'':'<button class="record-del" data-del="'+esc(rec.id)+'">删除</button>')+'</div></article>';}).join(''):'<div class="empty-record">没有符合的记录。</div>');

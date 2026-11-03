@@ -10,7 +10,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="冲煮台">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="description" content="Mars 的个人咖啡冲煮台。五支豆、二十套方案，外加新杯对比。清晰的水温、累计粉水比、独立研磨设置与杯中反馈。">
+  <meta name="description" content="Mars 的个人咖啡冲煮台。五支豆、二十套方案，外加 Switch 03 对三旋空山文的对照。清晰的水温、累计粉水比、独立研磨设置与杯中反馈。">
   <title>Mars 咖啡冲煮台</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -21,7 +21,7 @@
   <noscript><p class="noscript">这个冲煮台需要运行 JavaScript。如果你是在聊天附件的预览里看到这一行，请点右上角的分享按钮，选择“在 Safari 中打开”，或者直接访问网页地址。</p></noscript>
   <header class="masthead">
     <a class="brand" href="./" aria-label="Mars 咖啡冲煮台首页"><span class="brand-mark">m<span>·</span></span><span>MARS <span class="brand-cn">咖啡冲煮台</span><small>每天好一点点</small></span></a>
-    <nav><span class="equipment"><i></i> Switch 03 · ZP6 · X-pro</span><button class="text-button" data-jump="comparePanel">新杯对比</button><button class="text-button" id="historyButton">冲煮记录 <span id="recordCount">0</span></button></nav>
+    <nav><span class="equipment"><i></i> Switch 03 · ZP6 · X-pro</span><button class="text-button" data-jump="comparePanel">Switch 03 对三旋空</button><button class="text-button" id="historyButton">冲煮记录 <span id="recordCount">0</span></button></nav>
   </header>
   <main class="shell">
     <section class="intro">
@@ -59,7 +59,7 @@
         </section>
         <details class="panel prep-panel">
           <summary><span>开冲前的小检查</span><span class="muted tiny">预热 · 去皮 · 阀门</span></summary>
-          <div class="prep-grid"><p><b>01</b>充分预热滤杯，润湿滤纸后倒掉预热水。</p><p><b>02</b>称粉研磨，铺平粉床，确认起始阀门。</p><p><b>03</b>冰冲先把冰放进分享壶。整套放上秤后去皮。</p><p><b>04</b>按当前配方水温准备注水。水温指开始注水时的壶内温度；第一滴落下时，点击开始。</p></div>
+          <div class="prep-grid"><p><b>01</b>充分预热 Switch 03 或三旋空山文，润湿滤纸后倒掉预热水。</p><p><b>02</b>称粉研磨，铺平粉床，确认起始阀门。</p><p><b>03</b>冰冲先把冰放进分享壶。整套放上秤后去皮。</p><p><b>04</b>按当前配方水温准备注水。水温指开始注水时的壶内温度；第一滴落下时，点击开始。</p></div>
         </details>
       </div>
       <aside class="brew-column">
@@ -89,11 +89,11 @@
       <div class="section-heading"><h2><span>03</span> 杯中记录</h2><div class="record-actions"><button class="text-button" id="filterButton" aria-pressed="false">只看当前方案</button><button class="text-button" id="importButton">导入</button><button class="text-button" id="exportButton">导出备份 ↗</button></div></div>
       <div id="records"></div>
     </section>
-    <section class="panel compare-panel" id="comparePanel"><div class="section-heading"><h2><span>04</span> 新杯对比</h2><span class="muted tiny">瑰夏 · Switch 03 对 清庭平底</span></div><div id="compareBody"></div></section>
-    <details class="panel gear-panel" id="gearPanel"><summary><span>05 · 我的器具</span><span class="muted tiny">水壶 · 磨豆机 · 滤杯 · 滤纸</span></summary><div id="gearBody"></div></details>
-    <details class="panel gear-panel notes-panel" id="notesPanel"><summary><span>06 · 平底杯笔记</span><span class="muted tiny">评杯 · 酸甜 · 可选探索</span></summary><div class="notes-body">
-      <h3>11-03 清庭平底首杯</h3>
-      <p>瑰夏 15 g / 248 g，ZP6 4.2，沸水，1:30 流干。花果香比 Switch 和 V60 更清晰，酸甜苦平衡，不薄。只是甜感比 Switch 基线略低。这是一杯好咖啡，不是要修的问题。</p>
+    <section class="panel compare-panel" id="comparePanel"><div class="section-heading"><h2><span>04</span> Switch 03 对三旋空山文</h2><span class="muted tiny">同一包瑰夏，同参数</span></div><div id="compareBody"></div></section>
+    <details class="panel gear-panel" id="gearPanel"><summary><span>05 · 我的器具</span><span class="muted tiny">X-pro · ZP6 · Switch 03 · 三旋空山文 · 滤纸</span></summary><div id="gearBody"></div></details>
+    <details class="panel gear-panel notes-panel" id="notesPanel"><summary><span>06 · 三旋空山文笔记</span><span class="muted tiny">评杯 · 酸甜 · 可选探索</span></summary><div class="notes-body">
+      <h3>11-03 清庭三旋空山文 280 ml 首杯</h3>
+      <p>瑰夏 15 g / 248 g，ZP6 4.2，沸水，1:30 流干。花果香比 Hario Switch 03 更清晰，酸甜苦平衡，不薄。只是甜感比 Switch 03 基线略低。第三段比计划早结束，每段之间粉床都滤空，所以干点由粉床阻力决定，不是注水节奏。这是一杯好咖啡，不是要修的问题。</p>
       <h3>怎么评一杯（SCA CVA 和世界冲煮杯）</h3>
       <ul><li><b>先分两件事：</b>强度是“有多少”，品质是“好不好”。酸质和甜感评品质，不评多少。</li>
       <li><b>香气：</b>强度、复杂度、清晰度。<b>风味：</b>口中味道加鼻后香气。</li>
@@ -101,7 +101,7 @@
       <li><b>口感：</b>厚度和质地，不是味道。<b>整体：</b>平衡，冷却后是否仍好。</li>
       <li><b>温度：</b>60°C、40°C、室温各尝一次，甜感常在变凉后出现。</li></ul>
       <h3>想调酸甜，可以试这些（选项，不是纠错）</h3>
-      <ul><li><b>研磨细 0.2：</b>萃取多一点，接触久一点。高流速纸可能先变干。</li>
+      <ul><li><b>研磨细 0.2：</b>萃取多一点，接触久一点。NANO 185 可能先变干。</li>
       <li><b>只拉长第三段：</b>1:10 注到 1:45，研磨不动。</li>
       <li><b>粉水比 1:16.5 改 1:16：</b>更浓一点（15 g / 240 g）。</li>
       <li><b>闭阀闷蒸 30 秒，或末段后轻转 2 秒。</b></li>
@@ -112,7 +112,7 @@
       <h3>反方意见</h3>
       <p>你喜欢的清晰，可能正是甜感略低的原因。研究里“甜”多半是香气联想加上没有苦和酸，不一定是萃取越多越甜。细 0.2 可能尝不出来，还可能变干。所以保持原样也是正确答案。想看清差别，先冲 4.2 再冲 4.0，蒙眼对比。</p>
     </div></details>
-    <footer><span>MARS · 冲煮台</span><p>配方以原归档为起点。2026-11-03 更新：按实测标注每套方案的状态，新增清庭平底对比杯和 v2 可选探索，评分加入品质印象（参照 SCA CVA 和世界冲煮杯），新增平底杯笔记。实测反馈不自动推广到其他冲法。</p><button class="text-button" id="allRecipesButton">查看全部参数</button></footer>
+    <footer><span>MARS · 冲煮台</span><p>配方以原归档为起点。2026-11-03 更新：按实测标注每套方案的状态，新增 Switch 03 对三旋空山文的对照和 v2 可选探索，评分加入品质印象（参照 SCA CVA 和世界冲煮杯），新增三旋空山文笔记。实测反馈不自动推广到其他冲法。</p><button class="text-button" id="allRecipesButton">查看全部参数</button></footer>
   </main>
   <dialog id="feedbackDialog">
     <form id="feedbackForm">
