@@ -10,12 +10,12 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="冲煮台">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="description" content="Mars 的个人咖啡冲煮台。五支豆、二十套方案，外加 Switch 03 对三旋空山文的对照。清晰的水温、累计粉水比、独立研磨设置与杯中反馈。">
+  <meta name="description" content="Mars 的个人咖啡冲煮台。五支豆，每套冲法可选 Hario Switch 03 或清庭三旋空山文。清晰的水温、累计粉水比、独立研磨设置与杯中反馈。">
   <title>Mars 咖啡冲煮台</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css?v=v3-2026-11-03">
+  <link rel="stylesheet" href="styles.css?v=v3-4-2026-11-03">
 </head>
 <body>
   <noscript><p class="noscript">这个冲煮台需要运行 JavaScript。如果你是在聊天附件的预览里看到这一行，请点右上角的分享按钮，选择“在 Safari 中打开”，或者直接访问网页地址。</p></noscript>
@@ -32,9 +32,10 @@
     <div class="workspace">
       <div class="recipe-column">
         <section class="panel select-panel">
-          <div class="section-heading"><h2><span>01</span> 今天冲哪支豆？</h2><span class="muted tiny">选择豆子和冲法</span></div>
+          <div class="section-heading"><h2><span>01</span> 今天冲哪支豆？</h2><span class="muted tiny">选择豆子、冲法和滤杯</span></div>
           <div id="beans" class="beans" role="group" aria-label="选择咖啡豆"></div>
           <div id="modes" class="modes" role="group" aria-label="选择冲煮方法"></div>
+          <div id="drippers" class="drippers" role="group" aria-label="选择滤杯"></div>
           <div id="recipeHeading" class="recipe-heading"></div>
           <div id="restRow" class="rest-row"></div>
           <div id="temperatureCard" class="water-temperature" aria-live="polite"></div>
@@ -112,7 +113,7 @@
       <h3>反方意见</h3>
       <p>你喜欢的清晰，可能正是甜感略低的原因。研究里“甜”多半是香气联想加上没有苦和酸，不一定是萃取越多越甜。细 0.2 可能尝不出来，还可能变干。所以保持原样也是正确答案。想看清差别，先冲 4.2 再冲 4.0，蒙眼对比。</p>
     </div></details>
-    <footer><span>MARS · 冲煮台</span><p>配方以原归档为起点。2026-11-03 更新：按实测标注每套方案的状态，新增 Switch 03 对三旋空山文的对照和 v2 可选探索，评分加入品质印象（参照 SCA CVA 和世界冲煮杯），新增三旋空山文笔记。实测反馈不自动推广到其他冲法。</p><button class="text-button" id="allRecipesButton">查看全部参数</button></footer>
+    <footer><span>MARS · 冲煮台</span><p>配方以原归档为起点。2026-11-03 更新：新增器具选择（Hario Switch 03 / 清庭三旋空山文），每豆每冲法都有对应方案；按实测标注状态；Switch 03 对三旋空山文对照和 v2 探索；评分加入品质印象（参照 SCA CVA 和世界冲煮杯）。实测反馈不自动推广到其他冲法。</p><button class="text-button" id="allRecipesButton">查看全部参数</button></footer>
   </main>
   <dialog id="feedbackDialog">
     <form id="feedbackForm">
@@ -131,7 +132,7 @@
   <div id="toast" class="toast" role="status"></div>
   <button id="miniBar" class="mini-bar" hidden aria-label="回到计时卡"></button>
   <nav class="tabbar" id="tabbar" aria-label="快速跳转"><button type="button" data-tab="select" class="on"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 11h13v5a5 5 0 0 1-5 5h-3a5 5 0 0 1-5-5z"/><path d="M18.5 12h1.5a2.7 2.7 0 0 1 0 5.4h-1.8"/><path d="M9.5 4.5v3M14 4v3.5"/></svg>方案</button><button type="button" data-tab="focusCard"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="15.5" r="8"/><path d="M14 15.5V10.5M11 4h6M21 8l1.5-1.5"/></svg>计时</button><button type="button" data-tab="recordsPanel"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="4" width="17" height="20" rx="3.5"/><path d="M10 10h8M10 14.5h8M10 19h4.5"/></svg>记录</button><button type="button" data-tab="comparePanel"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 5v18M7 8.5h14M9 23h10"/><path d="M7 8.5 3.8 15a3.4 3.4 0 0 0 6.4 0zM21 8.5 17.8 15a3.4 3.4 0 0 0 6.4 0z"/></svg>对比</button></nav>
-  <script src="recipes.js?v=v3-2026-11-03"></script><script src="app.js?v=v3-2026-11-03"></script>
+  <script src="recipes.js?v=v3-4-2026-11-03"></script><script src="app.js?v=v3-4-2026-11-03"></script>
   <script>if("serviceWorker"in navigator&&/^https?:$/.test(location.protocol)){addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}</script>
 </body>
 </html>

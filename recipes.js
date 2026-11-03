@@ -1,5 +1,5 @@
 window.BREW_DATA = {
- "version": 1,
+ "version": 2,
  "sourceDate": "2026-10-23",
  "beans": [
   {
@@ -1271,6 +1271,1192 @@ window.BREW_DATA = {
    "dripper": "sw"
   },
   {
+   "id": "gesha-pure-qt",
+   "bean": "gesha",
+   "mode": "pure",
+   "dose": 15,
+   "water": 248,
+   "ice": 0,
+   "grind": 4.2,
+   "window": [
+    120,
+    140
+   ],
+   "cut": null,
+   "structure": "阀门全程开（推断，三旋空山文开关底座），三段滴滤；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "开",
+     "water": 45,
+     "text": "绕圈注水，轻摇 2 秒",
+     "checkpoint": null
+    },
+    {
+     "at": 35,
+     "until": 55,
+     "valve": "开",
+     "water": 150,
+     "text": "绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 70,
+     "until": 95,
+     "valve": "开",
+     "water": 248,
+     "text": "绕圈注水，1:35 前注完",
+     "checkpoint": null
+    }
+   ],
+   "verified": false,
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "对照 · 已冲一次",
+    "note": "两杯用同一壶沸水，水温完全相同。水温沿用瑰夏纯热的条件，没有单独测过。",
+    "source": "2026-11-03 Switch 03 对三旋空山文计划"
+   },
+   "status": {
+    "kind": "m",
+    "cups": 1
+   },
+   "dripper": "qt",
+   "baseline": null,
+   "nextTest": "这杯已经冲过一次（11-03，1:30）。可选探索：下一杯用「三旋空山文 v2」，只改 ZP6 4.2 改成 4.0。想保持原样也完全可以。",
+   "noWindow": true,
+   "startNote": "Switch 03 对三旋空山文：瑰夏 15 g / 248 g（1:16.5），ZP6 4.2，沸水，除了滤杯（Switch 03 和三旋空山文）与滤纸（V60-03 和 NANO 185）外，两杯完全一样。步骤是把瑰夏纯热的累计比例换算到 15 g（推断）。两杯都记下真实干点，不预设估计。 11-03 已冲一杯：干点 1:30，好喝，花果香清晰。分段注水不会溢出，只有关阀全浸泡才要看杯容量（你已确认）。",
+   "cup": {
+    "title": "清晰，平衡，甜感略低。",
+    "desc": "11-03 15:50：干点 1:30。花果香比 Hario Switch 03 更清晰，酸质更明确，整体平衡，不薄。甜感比 Switch 03 基线略低。这是一杯好咖啡。",
+    "status": "来自你的真实反馈 · 1 杯 · 对照"
+   }
+  },
+  {
+   "id": "alo-hot-qt",
+   "bean": "alo",
+   "mode": "hot",
+   "dose": 15,
+   "water": 262,
+   "ice": 0,
+   "grind": 4.8,
+   "window": [
+    110,
+    130
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "90",
+    "unit": "°C",
+    "detail": "X-pro 可精确设定 90°C，仍需实际出水确认",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "沿用本次对话提出的 90°C 混合热冲对照起点，尚未收到这套方案的实测反馈。没有测温设备时，不按固定等待秒数假定已经到 90°C。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "2026-10-26 本对话，Alo 混合热冲低温对照建议"
+   },
+   "structure": "推断，三旋空山文开关底座。关阀闷蒸 30 秒，再一段连续注水；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "关",
+     "water": 45,
+     "text": "注水，轻摇 1 秒，小碟盖住杯口闷蒸",
+     "checkpoint": null
+    },
+    {
+     "at": 30,
+     "until": 60,
+     "valve": "开",
+     "water": 150,
+     "text": "拿开小碟，开阀，中心小圈连续注水，壶嘴放低",
+     "checkpoint": "约 1:00 读数到这里"
+    },
+    {
+     "at": 60,
+     "until": 85,
+     "valve": "开",
+     "water": 262,
+     "text": "不停，继续注水，1:25 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「混合热冲」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。",
+   "nextTest": "这套还没在三旋空山文冲过。先按起点冲一杯，记下干点和评分，再改一项。"
+  },
+  {
+   "id": "alo-ice-qt",
+   "bean": "alo",
+   "mode": "ice",
+   "dose": 15,
+   "water": 150,
+   "ice": 98,
+   "grind": 4.2,
+   "window": [
+    100,
+    120
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "原手册统一使用当地刚沸水。这是该方案的归档起点，不代表已验证为这支豆、这套冲法的最佳水温。 纯手冲热饮约 85°C 冲完再加冰的反馈，不等于本套减少热水的冰冲已验证。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "Claude 迁移：migration-03-latest-manual.md，2026-10-21，第三节；migration-03-brew-card.html"
+   },
+   "structure": "推断，三旋空山文开关底座。关阀闷蒸 40 秒，再一段连续注水（冰冲）；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "关",
+     "water": 45,
+     "text": "注水，轻摇 1 秒，闷蒸",
+     "checkpoint": null
+    },
+    {
+     "at": 40,
+     "until": 55,
+     "valve": "开",
+     "water": 90,
+     "text": "开阀，中心连续注水",
+     "checkpoint": "约 0:55 读数到这里"
+    },
+    {
+     "at": 55,
+     "until": 75,
+     "valve": "开",
+     "water": 150,
+     "text": "不停，继续注水，1:15 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「混合冰冲」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "alo-pure-qt",
+   "bean": "alo",
+   "mode": "pure",
+   "dose": 15,
+   "water": 262,
+   "ice": 0,
+   "grind": 4.6,
+   "window": [
+    165,
+    170
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "85",
+    "unit": "°C",
+    "detail": "约值，沿用这次试冲条件。X-pro 现在可以精确设定",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "你这杯约用 85°C：热时醇厚、入口甜，随后苦，酸和花果香弱。冲完另加约 100g 冰后，花果香、酸和甜更明确，苦感很弱。冰的融化量未知，尚不能分开判断降温与稀释的作用。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "2026-10-26 本对话，Mars 对 Alo 纯手冲热饮及加冰后的反馈"
+   },
+   "structure": "阀门全程开（推断，三旋空山文开关底座），三段滴滤；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "开",
+     "water": 45,
+     "text": "绕圈注水，轻摇 2 秒",
+     "checkpoint": null
+    },
+    {
+     "at": 35,
+     "until": 55,
+     "valve": "开",
+     "water": 150,
+     "text": "绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 70,
+     "until": 95,
+     "valve": "开",
+     "water": 262,
+     "text": "绕圈注水，1:35 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「纯手冲·热」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。",
+   "nextTest": "这套还没在三旋空山文冲过。先按起点冲一杯，记下干点和评分，再改一项。"
+  },
+  {
+   "id": "alo-pice-qt",
+   "bean": "alo",
+   "mode": "pice",
+   "dose": 15,
+   "water": 150,
+   "ice": 98,
+   "grind": 4,
+   "window": [
+    100,
+    120
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "原手册统一使用当地刚沸水。这是该方案的归档起点，不代表已验证为这支豆、这套冲法的最佳水温。 纯手冲热饮约 85°C 冲完再加冰的反馈，不等于本套减少热水的冰冲已验证。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "Claude 迁移：migration-03-latest-manual.md，2026-10-21，第三节；migration-03-brew-card.html"
+   },
+   "structure": "阀门全程开（推断，三旋空山文开关底座），三段滴滤；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "开",
+     "water": 45,
+     "text": "绕圈注水，轻摇 2 秒",
+     "checkpoint": null
+    },
+    {
+     "at": 35,
+     "until": 55,
+     "valve": "开",
+     "water": 98,
+     "text": "绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 70,
+     "until": 95,
+     "valve": "开",
+     "water": 150,
+     "text": "绕圈注水，1:35 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「纯手冲·冰」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "alo-light-hot-qt",
+   "bean": "alo-light",
+   "mode": "hot",
+   "dose": 15,
+   "water": 248,
+   "ice": 0,
+   "grind": 4.8,
+   "window": [
+    140,
+    200
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "这批标签为浅烘，先使用当地刚沸水作为对照起点。充分预热 Hario Switch 03；与中烘 Alo 的约 85°C 试冲分开，不自动继承其加冰后的反馈。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "2026-10-29 新批次试冲设计；温度与研磨为待验证建议，非生产者指定配方。"
+   },
+   "structure": "推断，三旋空山文开关底座。关阀闷蒸，0:45 开阀，闷蒸 45 秒后两段滴滤；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "关",
+     "water": 45,
+     "text": "绕圈浸湿全部咖啡粉，轻摇 1 秒，闷蒸",
+     "checkpoint": null
+    },
+    {
+     "at": 45,
+     "until": 75,
+     "valve": "开",
+     "water": 150,
+     "text": "开阀，低位绕圈注水，1:15 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 85,
+     "until": 110,
+     "valve": "开",
+     "water": 248,
+     "text": "继续低位绕圈注水，覆盖大部分粉面，1:50 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「混合热冲」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "alo-light-ice-qt",
+   "bean": "alo-light",
+   "mode": "ice",
+   "dose": 15,
+   "water": 150,
+   "ice": 90,
+   "grind": 4.2,
+   "window": [
+    125,
+    185
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "这批标签为浅烘，先使用当地刚沸水作为对照起点。充分预热 Hario Switch 03；与中烘 Alo 的约 85°C 试冲分开，不自动继承其加冰后的反馈。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "2026-10-29 新批次试冲设计；温度与研磨为待验证建议，非生产者指定配方。"
+   },
+   "structure": "推断，三旋空山文开关底座。关阀闷蒸，0:45 开阀，闷蒸 45 秒后两段滴滤，直接滴在分享壶冰上；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "关",
+     "water": 45,
+     "text": "绕圈浸湿全部咖啡粉，轻摇 1 秒，闷蒸",
+     "checkpoint": null
+    },
+    {
+     "at": 45,
+     "until": 65,
+     "valve": "开",
+     "water": 98,
+     "text": "开阀，低位绕圈注水，1:05 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 75,
+     "until": 95,
+     "valve": "开",
+     "water": 150,
+     "text": "继续低位绕圈注水，覆盖大部分粉面，1:35 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「混合冰冲」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "alo-light-pure-qt",
+   "bean": "alo-light",
+   "mode": "pure",
+   "dose": 15,
+   "water": 248,
+   "ice": 0,
+   "grind": 4.6,
+   "window": [
+    140,
+    200
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "这批标签为浅烘，先使用当地刚沸水作为对照起点。充分预热 Hario Switch 03；与中烘 Alo 的约 85°C 试冲分开，不自动继承其加冰后的反馈。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "2026-10-29 新批次试冲设计；温度与研磨为待验证建议，非生产者指定配方。"
+   },
+   "structure": "阀门全程开（推断，三旋空山文开关底座），三段滴滤；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "开",
+     "water": 45,
+     "text": "绕圈注水，轻摇 2 秒",
+     "checkpoint": null
+    },
+    {
+     "at": 35,
+     "until": 55,
+     "valve": "开",
+     "water": 150,
+     "text": "绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 70,
+     "until": 95,
+     "valve": "开",
+     "water": 248,
+     "text": "绕圈注水，1:35 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「纯手冲·热」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。",
+   "nextTest": "这套还没在三旋空山文冲过。先按起点冲一杯，记下干点和评分，再改一项。"
+  },
+  {
+   "id": "alo-light-pice-qt",
+   "bean": "alo-light",
+   "mode": "pice",
+   "dose": 15,
+   "water": 150,
+   "ice": 90,
+   "grind": 4,
+   "window": [
+    125,
+    185
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "这批标签为浅烘，先使用当地刚沸水作为对照起点。充分预热 Hario Switch 03；与中烘 Alo 的约 85°C 试冲分开，不自动继承其加冰后的反馈。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "2026-10-29 新批次试冲设计；温度与研磨为待验证建议，非生产者指定配方。"
+   },
+   "structure": "阀门全程开（推断，三旋空山文开关底座），三段滴滤；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "开",
+     "water": 45,
+     "text": "绕圈注水，轻摇 2 秒",
+     "checkpoint": null
+    },
+    {
+     "at": 35,
+     "until": 55,
+     "valve": "开",
+     "water": 98,
+     "text": "绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 70,
+     "until": 95,
+     "valve": "开",
+     "water": 150,
+     "text": "绕圈注水，1:35 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「纯手冲·冰」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "cm-hot-qt",
+   "bean": "cm",
+   "mode": "hot",
+   "dose": 15,
+   "water": 240,
+   "ice": 0,
+   "grind": 4.6,
+   "window": [
+    120,
+    140
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "原手册统一使用当地刚沸水。这是该方案的归档起点，不代表已验证为这支豆、这套冲法的最佳水温。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "Claude 迁移：migration-03-latest-manual.md，2026-10-21，第三节；migration-03-brew-card.html"
+   },
+   "structure": "推断，三旋空山文开关底座。关阀闷蒸 30 秒，再两段滴滤，2:50 截止；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "关",
+     "water": 45,
+     "text": "注水，轻摇 2 秒，小碟盖住杯口闷蒸",
+     "checkpoint": null
+    },
+    {
+     "at": 30,
+     "until": 55,
+     "valve": "开",
+     "water": 142,
+     "text": "拿开小碟，开阀，绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 70,
+     "until": 95,
+     "valve": "开",
+     "water": 240,
+     "text": "对准中心低位注水，1:35 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「混合热冲」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "cm-ice-qt",
+   "bean": "cm",
+   "mode": "ice",
+   "dose": 15,
+   "water": 142,
+   "ice": 90,
+   "grind": 4,
+   "window": [
+    105,
+    125
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "原手册统一使用当地刚沸水。这是该方案的归档起点，不代表已验证为这支豆、这套冲法的最佳水温。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "Claude 迁移：migration-03-latest-manual.md，2026-10-21，第三节；migration-03-brew-card.html"
+   },
+   "structure": "推断，三旋空山文开关底座。关阀闷蒸 40 秒，再两段滴滤，2:35 截止（冰冲）；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "关",
+     "water": 45,
+     "text": "注水，轻摇 2 秒，闷蒸",
+     "checkpoint": null
+    },
+    {
+     "at": 40,
+     "until": 55,
+     "valve": "开",
+     "water": 90,
+     "text": "开阀，绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 65,
+     "until": 80,
+     "valve": "开",
+     "water": 142,
+     "text": "对准中心低位注水，1:20 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「混合冰冲」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "cm-pure-qt",
+   "bean": "cm",
+   "mode": "pure",
+   "dose": 15,
+   "water": 240,
+   "ice": 0,
+   "grind": 4.4,
+   "window": [
+    120,
+    140
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "原手册统一使用当地刚沸水。这是该方案的归档起点，不代表已验证为这支豆、这套冲法的最佳水温。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "Claude 迁移：migration-03-latest-manual.md，2026-10-21，第三节；migration-03-brew-card.html"
+   },
+   "structure": "阀门全程开（推断，三旋空山文开关底座），三段滴滤；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "开",
+     "water": 45,
+     "text": "绕圈注水，轻摇 2 秒",
+     "checkpoint": null
+    },
+    {
+     "at": 35,
+     "until": 55,
+     "valve": "开",
+     "water": 150,
+     "text": "绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 70,
+     "until": 95,
+     "valve": "开",
+     "water": 240,
+     "text": "绕圈注水，1:35 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「纯手冲·热」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "cm-pice-qt",
+   "bean": "cm",
+   "mode": "pice",
+   "dose": 15,
+   "water": 142,
+   "ice": 90,
+   "grind": 3.8,
+   "window": [
+    105,
+    125
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "原手册统一使用当地刚沸水。这是该方案的归档起点，不代表已验证为这支豆、这套冲法的最佳水温。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "Claude 迁移：migration-03-latest-manual.md，2026-10-21，第三节；migration-03-brew-card.html"
+   },
+   "structure": "阀门全程开（推断，三旋空山文开关底座），三段滴滤；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "开",
+     "water": 45,
+     "text": "绕圈注水，轻摇 2 秒",
+     "checkpoint": null
+    },
+    {
+     "at": 35,
+     "until": 55,
+     "valve": "开",
+     "water": 94,
+     "text": "绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 70,
+     "until": 95,
+     "valve": "开",
+     "water": 142,
+     "text": "绕圈注水，1:35 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「纯手冲·冰」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "gesha-hot-qt",
+   "bean": "gesha",
+   "mode": "hot",
+   "dose": 15,
+   "water": 248,
+   "ice": 0,
+   "grind": 4.4,
+   "window": [
+    120,
+    140
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "原手册统一使用当地刚沸水。这是该方案的归档起点，不代表已验证为这支豆、这套冲法的最佳水温。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "Claude 迁移：migration-03-latest-manual.md，2026-10-21，第三节；migration-03-brew-card.html"
+   },
+   "structure": "推断，三旋空山文开关底座。关阀闷蒸 30 秒，再两段滴滤；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "关",
+     "water": 45,
+     "text": "注水，轻摇 2 秒，小碟盖住杯口闷蒸",
+     "checkpoint": null
+    },
+    {
+     "at": 30,
+     "until": 55,
+     "valve": "开",
+     "water": 150,
+     "text": "拿开小碟，开阀，绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 70,
+     "until": 95,
+     "valve": "开",
+     "water": 248,
+     "text": "绕圈注水，1:35 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「混合热冲」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "gesha-ice-qt",
+   "bean": "gesha",
+   "mode": "ice",
+   "dose": 15,
+   "water": 142,
+   "ice": 90,
+   "grind": 3.8,
+   "window": [
+    105,
+    125
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "原手册统一使用当地刚沸水。这是该方案的归档起点，不代表已验证为这支豆、这套冲法的最佳水温。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "Claude 迁移：migration-03-latest-manual.md，2026-10-21，第三节；migration-03-brew-card.html"
+   },
+   "structure": "推断，三旋空山文开关底座。关阀闷蒸 40 秒，再两段滴滤（冰冲）；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "关",
+     "water": 45,
+     "text": "注水，轻摇 2 秒，闷蒸",
+     "checkpoint": null
+    },
+    {
+     "at": 40,
+     "until": 55,
+     "valve": "开",
+     "water": 90,
+     "text": "开阀，绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 65,
+     "until": 80,
+     "valve": "开",
+     "water": 142,
+     "text": "绕圈注水，1:20 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「混合冰冲」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "gesha-pice-qt",
+   "bean": "gesha",
+   "mode": "pice",
+   "dose": 15,
+   "water": 142,
+   "ice": 90,
+   "grind": 3.6,
+   "window": [
+    105,
+    125
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "原手册统一使用当地刚沸水。这是该方案的归档起点，不代表已验证为这支豆、这套冲法的最佳水温。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "Claude 迁移：migration-03-latest-manual.md，2026-10-21，第三节；migration-03-brew-card.html"
+   },
+   "structure": "阀门全程开（推断，三旋空山文开关底座），三段滴滤；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "开",
+     "water": 45,
+     "text": "绕圈注水，轻摇 2 秒",
+     "checkpoint": null
+    },
+    {
+     "at": 35,
+     "until": 55,
+     "valve": "开",
+     "water": 94,
+     "text": "绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 70,
+     "until": 95,
+     "valve": "开",
+     "water": 142,
+     "text": "绕圈注水，1:35 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「纯手冲·冰」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "pb-hot-qt",
+   "bean": "pb",
+   "mode": "hot",
+   "dose": 15,
+   "water": 240,
+   "ice": 0,
+   "grind": 4.4,
+   "window": [
+    165,
+    185
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "原手册统一使用当地刚沸水。这是该方案的归档起点，不代表已验证为这支豆、这套冲法的最佳水温。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "Claude 迁移：migration-03-latest-manual.md，2026-10-21，第三节；migration-03-brew-card.html"
+   },
+   "structure": "推断，三旋空山文开关底座。先滴后泡：开阀注一半，0:45 关阀注另一半，2:00 开阀；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "开",
+     "water": 38,
+     "text": "绕圈注水，轻摇 1-2 秒",
+     "checkpoint": null
+    },
+    {
+     "at": 20,
+     "until": 40,
+     "valve": "开",
+     "water": 120,
+     "text": "继续绕圈注水，0:40 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 45,
+     "until": 75,
+     "valve": "关",
+     "water": 240,
+     "text": "关阀，对准中心注水，1:15 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 120,
+     "until": null,
+     "valve": "开",
+     "water": null,
+     "text": "拿开小碟，开阀放流",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「混合热冲」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "pb-ice-qt",
+   "bean": "pb",
+   "mode": "ice",
+   "dose": 15,
+   "water": 142,
+   "ice": 90,
+   "grind": 3.8,
+   "window": [
+    150,
+    165
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "原手册统一使用当地刚沸水。这是该方案的归档起点，不代表已验证为这支豆、这套冲法的最佳水温。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "Claude 迁移：migration-03-latest-manual.md，2026-10-21，第三节；migration-03-brew-card.html"
+   },
+   "structure": "推断，三旋空山文开关底座。先滴后泡（冰冲）：0:45 关阀，2:00 开阀；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "开",
+     "water": 38,
+     "text": "绕圈注水，轻摇 1-2 秒",
+     "checkpoint": null
+    },
+    {
+     "at": 20,
+     "until": 35,
+     "valve": "开",
+     "water": 72,
+     "text": "绕圈注水，0:35 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 45,
+     "until": 65,
+     "valve": "关",
+     "water": 142,
+     "text": "关阀，对准中心注水，1:05 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 120,
+     "until": null,
+     "valve": "开",
+     "water": null,
+     "text": "开阀放流",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「混合冰冲」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "pb-pure-qt",
+   "bean": "pb",
+   "mode": "pure",
+   "dose": 15,
+   "water": 240,
+   "ice": 0,
+   "grind": 4.2,
+   "window": [
+    145,
+    165
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "原手册统一使用当地刚沸水。这是该方案的归档起点，不代表已验证为这支豆、这套冲法的最佳水温。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "Claude 迁移：migration-03-latest-manual.md，2026-10-21，第三节；migration-03-brew-card.html"
+   },
+   "structure": "阀门全程开（推断，三旋空山文开关底座），三段滴滤；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "开",
+     "water": 45,
+     "text": "绕圈注水，轻摇 2 秒",
+     "checkpoint": null
+    },
+    {
+     "at": 35,
+     "until": 55,
+     "valve": "开",
+     "water": 150,
+     "text": "绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 70,
+     "until": 95,
+     "valve": "开",
+     "water": 240,
+     "text": "绕圈注水，1:35 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「纯手冲·热」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。"
+  },
+  {
+   "id": "pb-pice-qt",
+   "bean": "pb",
+   "mode": "pice",
+   "dose": 15,
+   "water": 142,
+   "ice": 90,
+   "grind": 3.6,
+   "window": [
+    105,
+    125
+   ],
+   "cut": null,
+   "verified": false,
+   "baseline": null,
+   "dripper": "qt",
+   "noWindow": true,
+   "status": {
+    "kind": "u",
+    "cups": 0
+   },
+   "temperature": {
+    "value": "刚沸",
+    "unit": "",
+    "detail": "昆明沸点约 93°C，X-pro 最高约 93°C，以实际沸点为准",
+    "status": "推断 · 未在三旋空山文实测",
+    "note": "原手册统一使用当地刚沸水。这是该方案的归档起点，不代表已验证为这支豆、这套冲法的最佳水温。 水温沿用同豆同冲法的 Hario Switch 03 方案，未在清庭三旋空山文实测（推断）。",
+    "source": "Claude 迁移：migration-03-latest-manual.md，2026-10-21，第三节；migration-03-brew-card.html"
+   },
+   "structure": "阀门全程开（推断，三旋空山文开关底座），三段滴滤；NANO 莱赛尔高流速 185 波浪滤纸，280 ml",
+   "actions": [
+    {
+     "at": 0,
+     "until": 10,
+     "valve": "开",
+     "water": 45,
+     "text": "绕圈注水，轻摇 2 秒",
+     "checkpoint": null
+    },
+    {
+     "at": 35,
+     "until": 55,
+     "valve": "开",
+     "water": 94,
+     "text": "绕圈注水，0:55 前注完",
+     "checkpoint": null
+    },
+    {
+     "at": 70,
+     "until": 95,
+     "valve": "开",
+     "water": 142,
+     "text": "绕圈注水，1:35 前注完",
+     "checkpoint": null
+    }
+   ],
+   "startNote": "从同豆 Hario Switch 03「纯手冲·冰」方案按粉量缩到 15 g（粉水比不变）得到的三旋空山文起点（推断）。清庭三旋空山文 280 ml + NANO 莱赛尔高流速 185 波浪滤纸。未在三旋空山文实测。一次只改一项。",
+   "nextTest": "这套还没在三旋空山文冲过。先按起点冲一杯，记下干点和评分，再改一项。"
+  },
+  {
    "id": "gesha-cmp-sw",
    "bean": "gesha",
    "mode": "cmp-sw",
@@ -1605,5 +2791,19 @@ window.BREW_DATA = {
    "水",
    "水质没有测过。目标 TDS 40 至 80 ppm。"
   ]
+ ],
+ "drippers": [
+  {
+   "id": "sw",
+   "name": "Hario Switch 03",
+   "short": "Switch 03",
+   "detail": "360 ml · V60-03 滤纸"
+  },
+  {
+   "id": "qt",
+   "name": "清庭三旋空山文",
+   "short": "三旋空山文",
+   "detail": "280 ml · NANO 185 波浪滤纸"
+  }
  ]
 };

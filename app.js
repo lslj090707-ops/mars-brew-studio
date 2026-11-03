@@ -15,6 +15,29 @@ function toast(s){$('toast').textContent=s;$('toast').classList.add('visible');c
 function recipe(){return DATA.recipes.find(r=>r.id===state.selected);}
 function bean(r=recipe()){return DATA.beans.find(b=>b.id===r.bean);}
 function mode(r=recipe()){return DATA.modes.find(m=>m.id===r.mode);}
+function dripperOf(r=recipe()){return r.dripper||'sw';}
+function drippers(){return DATA.drippers||[{id:'sw',name:'Hario Switch 03',short:'Switch 03'},{id:'qt',name:'清庭三旋空山文',short:'三旋空山文'}];}
+function visibleMode(modeId){return modeId&&modeId.indexOf('cmp')!==0&&modeId!=='flat'?modeId:'pure';}
+function findRecipe(beanId, modeId, dripperId){
+ const d=dripperId||'sw', m=modeId;
+ if(m&&(m.indexOf('cmp')===0||m==='flat')){
+  const hit=DATA.recipes.find(r=>r.bean===beanId&&r.mode===m&&(r.dripper||'sw')===d);
+  if(hit)return hit;
+ }
+ const id=beanId+'-'+m+(d==='qt'?'-qt':'');
+ let hit=DATA.recipes.find(r=>r.id===id);
+ if(hit)return hit;
+ hit=DATA.recipes.find(r=>r.bean===beanId&&r.mode===m&&(r.dripper||'sw')===d);
+ return hit||null;
+}
+function selectCombo(beanId, modeId, dripperId, opts){
+ if(busy()){toast('完成或重置当前计时后，再切换配方');return;}
+ const m=visibleMode(modeId), d=dripperId||'sw';
+ const hit=findRecipe(beanId, m, d);
+ if(!hit){toast(d==='qt'?'这套豆子和冲法还没有三旋空山文方案':'没有找到对应方案');return;}
+ state.selected=hit.id;persist();render();
+ if(opts&&opts.toast)toast(opts.toast);
+}
 function config(r=recipe()){const c=state.configs[r.id]||{};return {dose:Number.isFinite(c.dose)?clamp(c.dose,5,45):r.dose,grind:Number.isFinite(c.grind)?Math.round(clamp(c.grind,.1,9)*10)/10:r.grind};}
 function amounts(r=recipe()){const c=config(r),factor=c.dose/r.dose;return {dose:c.dose,water:Math.round(r.water*factor),ice:Math.round(r.ice*factor),grind:c.grind,factor};}
 function busy(){return !!state.timer;}
@@ -34,10 +57,12 @@ return out.sort((a,b)=>a.at-b.at);
 function render(){
 const r=recipe(),b=bean(),a=amounts(),m=mode(),locked=busy(),v=singleVerified();
 $('beans').innerHTML=DATA.beans.map(x=>'<button class="bean '+(x.id===r.bean?'active':'')+'" data-bean="'+x.id+'" aria-pressed="'+(x.id===r.bean)+'" '+(locked?'disabled':'')+'><span class="bean-glyph" aria-hidden="true"></span><b>'+esc(x.short)+'</b><small>'+esc(x.country||'')+'</small></button>').join('');
-$('recipeCount').textContent='五支豆，二十套方案，外加 Switch 03 对三旋空山文的对照和 v2 探索。从你已经喝到的好味道，继续往前。';
+const vis=DATA.recipes.filter(x=>x.mode.indexOf('cmp')!==0&&x.mode!=='flat');
+$('recipeCount').textContent='五支豆，每套冲法都可选 Hario Switch 03 或清庭三旋空山文，外加对照和 v2 探索。先选豆子、冲法和滤杯。';
 $('allRecipesButton').textContent='查看全部参数与状态';
-$('recipeIndexTitle').textContent='二十套，分别校准。';
+$('recipeIndexTitle').textContent=vis.length+' 套可见方案，分别校准。';
 $('modes').innerHTML=DATA.modes.filter(x=>!x.hidden).map(x=>'<button class="mode '+(x.id===r.mode?'active':'')+'" data-mode="'+x.id+'" aria-pressed="'+(x.id===r.mode)+'" '+(locked?'disabled':'')+'>'+esc(x.name)+'</button>').join('');
+$('drippers').innerHTML=drippers().map(x=>'<button class="dripper '+(x.id===dripperOf(r)?'active':'')+'" data-dripper="'+x.id+'" aria-pressed="'+(x.id===dripperOf(r))+'" '+(locked?'disabled':'')+'><b>'+esc(x.short)+'</b><small>'+esc(x.detail||x.name)+'</small></button>').join('');
 $('recipeHeading').innerHTML='<div><h3>'+esc(b.name)+'</h3><p>'+esc(b.meta)+' · '+esc(m.name)+'</p>'+(b.labelInfo?'<p>'+esc(b.labelInfo)+'</p>':'')+'<p class="dripper-line">'+esc(dripperName(r))+'</p></div><span class="status '+statusInfo(r).cls+'">'+esc(statusInfo(r).text)+'</span>';
 $('temperatureCard').innerHTML='<div class="temperature-main"><span class="temperature-label">注水水温 · 壶内</span><strong>'+esc(r.temperature.value)+'<small>'+esc(r.temperature.unit)+'</small></strong><span class="temperature-detail">'+esc(r.temperature.detail)+'</span><span class="temperature-basis">'+esc(r.temperature.status)+'</span></div><p>'+esc(r.temperature.note)+'</p><small class="temperature-method">开始注水时的壶温，不是粉床温度。各段使用同壶水，自然降温，不要求中途重新加热。</small>';
 const tiles=[['咖啡粉',a.dose,'g','研磨前称量'],['热水',a.water,'g',ratio(a.water,a.dose)+' · 不含冰'],['ZP6',a.grind.toFixed(1),'',grindSub(r,a)],a.ice?['分享壶冰',a.ice,'g','总投入水比 '+ratio(a.water+a.ice,a.dose)]:(r.noWindow?['干点','待实测','','记下真实时间 · 无预设估计']:['估计窗口',clock(r.window[0]),'','至 '+clock(r.window[1])+' · 估计，非硬指标'])];
@@ -100,9 +125,10 @@ async function keepAwake(){try{if('wakeLock'in navigator&&state.timer&&state.tim
 function releaseWake(){if(wake){wake.release().catch(()=>{});wake=null;}}
 function select(id){if(busy()){toast('完成或重置当前计时后，再切换配方');return;}if(DATA.recipes.some(r=>r.id===id)){state.selected=id;persist();render();}}
 document.addEventListener('click',function(e){
-const bb=e.target.closest('[data-bean]'),mm=e.target.closest('[data-mode]'),gg=e.target.closest('[data-grind]'),cl=e.target.closest('[data-close]'),rr=e.target.closest('[data-recipe]');
-if(bb)select(bb.dataset.bean+'-'+(recipe().mode.indexOf('cmp')===0||recipe().mode==='flat'?'pure':recipe().mode));
-if(mm)select(recipe().bean+'-'+mm.dataset.mode);
+const bb=e.target.closest('[data-bean]'),mm=e.target.closest('[data-mode]'),dd=e.target.closest('[data-dripper]'),gg=e.target.closest('[data-grind]'),cl=e.target.closest('[data-close]'),rr=e.target.closest('[data-recipe]');
+if(bb){const r0=recipe();selectCombo(bb.dataset.bean, visibleMode(r0.mode), dripperOf(r0));}
+if(mm){const r0=recipe();selectCombo(r0.bean, mm.dataset.mode, dripperOf(r0));}
+if(dd){const r0=recipe();selectCombo(r0.bean, visibleMode(r0.mode), dd.dataset.dripper);}
 if(gg&&!busy()){const c=config();c.grind=Math.round(clamp(c.grind+Number(gg.dataset.grind),.1,9)*10)/10;state.configs[state.selected]=c;persist();render();}
 if(cl)$(cl.dataset.close).close();
 if(rr&&!busy()){select(rr.dataset.recipe);$('allRecipesDialog').close();window.scrollTo({top:0,behavior:'smooth'});}
@@ -120,7 +146,7 @@ function dripperName(r){return r.dripper==='qt'?'清庭三旋空山文 280 ml ·
 function statusInfo(r){const s=r.status||{kind:'u',cups:0};return s.kind==='m'?{cls:'measured',text:'已实测（'+s.cups+' 杯）'}:s.kind==='p'?{cls:'tentative',text:'暂定'}:{cls:'untested',text:'未测试'};}
 function grindSub(r,a){const moved=Math.abs(a.grind-r.grind)>0.001;const pre=moved?'已改动 · ':'';
  if(r.mode==='flat')return pre+'可选探索 · 只比 11-03 那杯细 0.2';
- if(r.id==='gesha-cmp-qt')return pre+'11-03 已冲 · 干点 1:30 · 好喝';
+ if(r.id==='gesha-cmp-qt'||r.id==='gesha-pure-qt')return pre+'11-03 已冲 · 干点 1:30 · 好喝';
  if(r.mode.indexOf('cmp')===0)return pre+'沿用瑰夏纯热 4.2 · 对照杯未实测';
  if(r.id==='gesha-pure')return pre+'已实测 · 唯一实测的刻度';
  if(r.status.kind==='m')return pre+'已冲 '+r.status.cups+' 杯 · 手册基线 '+(r.baseline!=null?r.baseline.toFixed(1):'无');
@@ -140,8 +166,9 @@ function renderToday(){const al=DATA.beans.find(x=>x.id==='alo-light'),i=restInf
  const cs=state.records.filter(x=>x.recipe==='gesha-cmp-sw').length,cq=state.records.filter(x=>x.recipe==='gesha-cmp-qt').length+DATA.history.filter(x=>x.recipe==='gesha-cmp-qt').length;
  chips.push('<button class="today-chip" data-jump="comparePanel"><span>Switch 03 对三旋空山文</span><b>'+(cs&&cq?'两杯都冲了':cs||cq?'冲了一杯':'待冲')+'</b><small>三旋空山文 11-03 已冲一杯 · 干点 1:30</small></button>');
  chips.push('<button class="today-chip" data-jump="notesPanel"><span>三旋空山文笔记</span><b>评杯与酸甜</b><small>评分标准和可选探索</small></button>');
+ const visN=DATA.recipes.filter(x=>x.mode.indexOf('cmp')!==0&&x.mode!=='flat').length;
  const m=DATA.recipes.filter(x=>x.mode.indexOf('cmp')!==0&&x.mode!=='flat'&&x.status.kind==='m').length;
- chips.push('<button class="today-chip" id="todayAll"><span>已实测的方案</span><b>'+m+' / 20</b><small>其余是起点或暂定，见全部参数</small></button>');
+ chips.push('<button class="today-chip" id="todayAll"><span>已实测的方案</span><b>'+m+' / '+visN+'</b><small>其余是起点或暂定，见全部参数</small></button>');
  $('todayStrip').innerHTML='<p class="eyebrow">今日 · '+todayStr()+'</p><div class="today-grid">'+chips.join('')+'</div>';}
 function prevOf(rec){return state.records.find(x=>x.id!==rec.id&&x.recipe===rec.recipe&&Date.parse(x.date)<Date.parse(rec.date));}
 function diffText(rec){const p=prevOf(rec);if(!p)return '';const ch=[];if(p.grind!==rec.grind)ch.push('研磨 '+Number(p.grind).toFixed(1)+' → '+Number(rec.grind).toFixed(1));if(p.dose!==rec.dose)ch.push('粉量 '+p.dose+' → '+rec.dose+' g');else if(p.water!==rec.water)ch.push('热水 '+p.water+' → '+rec.water+' g');if(p.temp&&rec.temp&&p.temp!==rec.temp)ch.push('水温 '+p.temp+' → '+rec.temp);
@@ -217,12 +244,13 @@ function renderRecords(){
   return '<article class="record'+(rec.reference?' reference':'')+'"><div class="record-date">'+when+'</div><div><h3>'+esc(bb.name)+' · '+esc(mm.name)+'</h3><div class="record-meta">'+esc(meta.join(' · '))+'</div>'+(rec.tags&&rec.tags.length?'<div class="record-tags">'+rec.tags.map(t=>'<span>'+esc(t)+'</span>').join('')+'</div>':'')+sc+(rec.note?'<p class="record-notes">'+esc(rec.note)+'</p>':'')+(df?'<p class="record-diff">'+esc(df)+'</p>':'')+(rec.next?'<p class="record-next"><b>建议</b>'+esc(rec.next)+'</p>':'')+'</div><div class="record-time">'+sec+'<small>'+(Number.isFinite(rec.seconds)&&rec.seconds!=null?'粉面积水消失':'没有精确计时')+'</small>'+(rec.reference?'':'<button class="record-del" data-del="'+esc(rec.id)+'">删除</button>')+'</div></article>';}).join(''):'<div class="empty-record">没有符合的记录。</div>');
 }
 
-function renderAll(){$('allRecipes').innerHTML=DATA.recipes.map(r=>{const a=amounts(r);return '<tr data-recipe="'+r.id+'" tabindex="0" role="button" aria-label="选择'+esc(bean(r).short+mode(r).name)+'"><td>'+esc(bean(r).short)+'<small>'+esc(mode(r).name)+'</small></td><td>'+a.dose+' / '+a.water+' / '+a.ice+'</td><td class="table-temperature">'+esc(temperatureText(r))+'<small>'+esc(r.temperature.detail)+'</small><small>'+esc(r.temperature.status)+'</small></td><td>'+a.grind.toFixed(1)+'</td><td>'+'<span class="status mini '+statusInfo(r).cls+'">'+esc(statusInfo(r).text)+'</span>'+'</td></tr>';}).join('');}
+function dripperShort(r){return dripperOf(r)==='qt'?'三旋空山文':'Switch 03';}
+function renderAll(){$('allRecipes').innerHTML=DATA.recipes.map(r=>{const a=amounts(r);return '<tr data-recipe="'+r.id+'" tabindex="0" role="button" aria-label="选择'+esc(bean(r).short+' · '+mode(r).name+' · '+dripperShort(r))+'"><td>'+esc(bean(r).short)+'<small>'+esc(mode(r).name)+' · '+esc(dripperShort(r))+'</small></td><td>'+a.dose+' / '+a.water+' / '+a.ice+'</td><td class="table-temperature">'+esc(temperatureText(r))+'<small>'+esc(r.temperature.detail)+'</small><small>'+esc(r.temperature.status)+'</small></td><td>'+a.grind.toFixed(1)+'</td><td>'+'<span class="status mini '+statusInfo(r).cls+'">'+esc(statusInfo(r).text)+'</span>'+'</td></tr>';}).join('');}
 $('allRecipes').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.target.closest('[data-recipe]')?.click();}});
 $('historyButton').onclick=()=>$('recordsPanel').scrollIntoView({behavior:'smooth'});
 $('allRecipesButton').onclick=()=>$('allRecipesDialog').showModal();
 $('printButton').onclick=()=>window.print();
-$('exportButton').onclick=()=>{const obj={format:'mars-brew-studio',version:1,exportedAt:new Date().toISOString(),app:'2026-11-03',records:state.records,configs:state.configs,roast:state.roast,selected:state.selected};const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='mars-brew-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('已导出配方设置与 '+state.records.length+' 条记录');};
+$('exportButton').onclick=()=>{const obj={format:'mars-brew-studio',version:1,exportedAt:new Date().toISOString(),app:'2026-11-03-v5',records:state.records,configs:state.configs,roast:state.roast,selected:state.selected};const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='mars-brew-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('已导出配方设置与 '+state.records.length+' 条记录');};
 $('importButton').onclick=()=>$('importFile').click();
 $('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;if(busy()){toast('请先完成或重置当前计时');e.target.value='';return;}if(f.size>5000000){toast('文件过大，请选择冲煮台导出的备份');e.target.value='';return;}try{const obj=JSON.parse(await f.text());if(obj.format!=='mars-brew-studio'||obj.version!==1||!Array.isArray(obj.records)||obj.records.length>1000||!obj.records.every(validRecord))throw Error();const existing=new Set(state.records.map(r=>r.id));const imported=obj.records.filter(r=>!existing.has(r.id)).map(cleanRecord);if(obj.roast&&typeof obj.roast==='object')for(const k in obj.roast)if(/^\d{4}-\d\d-\d\d$/.test(obj.roast[k])&&DATA.beans.some(b=>b.id===k))state.roast[k]=obj.roast[k];state.records=imported.concat(state.records).sort((a,b)=>Date.parse(b.date)-Date.parse(a.date)).slice(0,1000);if(obj.configs&&typeof obj.configs==='object'){for(const r of DATA.recipes){const c=obj.configs[r.id];if(c&&Number.isFinite(c.dose)&&c.dose>=5&&c.dose<=45&&Number.isFinite(c.grind)&&c.grind>=.1&&c.grind<=9)state.configs[r.id]={dose:c.dose,grind:c.grind};}}persist();render();toast('已合并 '+imported.length+' 条新记录，并恢复有效配方设置');}catch(err){toast('文件格式不匹配，未导入。请选择本工具的 JSON 备份。');}e.target.value='';};
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){updateTimer();keepAwake();}else persist();});
