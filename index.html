@@ -91,14 +91,35 @@
     </section>
     <section class="panel compare-panel" id="comparePanel"><div class="section-heading"><h2><span>04</span> 新杯对比</h2><span class="muted tiny">瑰夏 · Switch 03 对 清庭平底</span></div><div id="compareBody"></div></section>
     <details class="panel gear-panel" id="gearPanel"><summary><span>05 · 我的器具</span><span class="muted tiny">水壶 · 磨豆机 · 滤杯 · 滤纸</span></summary><div id="gearBody"></div></details>
-    <footer><span>MARS · 冲煮台</span><p>配方以原归档为起点。2026-11-03 更新：按实测标注每套方案的状态，新增清庭平底对比杯，加入味道评分和一次只改一项的建议。实测反馈不自动推广到其他冲法。</p><button class="text-button" id="allRecipesButton">查看全部参数</button></footer>
+    <details class="panel gear-panel notes-panel" id="notesPanel"><summary><span>06 · 平底杯笔记</span><span class="muted tiny">评杯 · 酸甜 · 可选探索</span></summary><div class="notes-body">
+      <h3>11-03 清庭平底首杯</h3>
+      <p>瑰夏 15 g / 248 g，ZP6 4.2，沸水，1:30 流干。花果香比 Switch 和 V60 更清晰，酸甜苦平衡，不薄。只是甜感比 Switch 基线略低。这是一杯好咖啡，不是要修的问题。</p>
+      <h3>怎么评一杯（SCA CVA 和世界冲煮杯）</h3>
+      <ul><li><b>先分两件事：</b>强度是“有多少”，品质是“好不好”。酸质和甜感评品质，不评多少。</li>
+      <li><b>香气：</b>强度、复杂度、清晰度。<b>风味：</b>口中味道加鼻后香气。</li>
+      <li><b>余韵：</b>好味道留多久，苦和发干会扣分。</li>
+      <li><b>口感：</b>厚度和质地，不是味道。<b>整体：</b>平衡，冷却后是否仍好。</li>
+      <li><b>温度：</b>60°C、40°C、室温各尝一次，甜感常在变凉后出现。</li></ul>
+      <h3>想调酸甜，可以试这些（选项，不是纠错）</h3>
+      <ul><li><b>研磨细 0.2：</b>萃取多一点，接触久一点。高流速纸可能先变干。</li>
+      <li><b>只拉长第三段：</b>1:10 注到 1:45，研磨不动。</li>
+      <li><b>粉水比 1:16.5 改 1:16：</b>更浓一点（15 g / 240 g）。</li>
+      <li><b>闭阀闷蒸 30 秒，或末段后轻转 2 秒。</b></li>
+      <li><b>粉量 18 g / 297 g：</b>粉层更厚，分段注水不会溢出。</li>
+      <li><b>水温不是好杠杆：</b>相同浓度和萃取率下，87 到 93°C 几乎尝不出差别（UC Davis 2020）。</li></ul>
+      <h3>可选探索：v2</h3>
+      <p>只把 ZP6 4.2 改成 4.0，其余完全不变。预期干点 1:35 到 1:50（推断）。看两点：甜感有没有升，花果香的清晰度有没有保住。</p>
+      <h3>反方意见</h3>
+      <p>你喜欢的清晰，可能正是甜感略低的原因。研究里“甜”多半是香气联想加上没有苦和酸，不一定是萃取越多越甜。细 0.2 可能尝不出来，还可能变干。所以保持原样也是正确答案。想看清差别，先冲 4.2 再冲 4.0，蒙眼对比。</p>
+    </div></details>
+    <footer><span>MARS · 冲煮台</span><p>配方以原归档为起点。2026-11-03 更新：按实测标注每套方案的状态，新增清庭平底对比杯和 v2 可选探索，评分加入品质印象（参照 SCA CVA 和世界冲煮杯），新增平底杯笔记。实测反馈不自动推广到其他冲法。</p><button class="text-button" id="allRecipesButton">查看全部参数</button></footer>
   </main>
   <dialog id="feedbackDialog">
     <form id="feedbackForm">
       <div class="dialog-heading"><p class="eyebrow">一杯一记</p><button type="button" class="close-button" data-close="feedbackDialog" aria-label="关闭">×</button></div>
       <h2>这一杯，喝起来怎么样？</h2><p id="feedbackSummary" class="muted"></p>
       <label class="field-label">粉面积水消失的时间<input id="finishTime" placeholder="例如 2:10" pattern="[0-9]{1,2}:[0-5][0-9]" required inputmode="text"></label>
-      <div class="scale-block"><p class="field-label-text">六项味道（可跳过，1 弱 5 强）</p><div id="scaleRows"></div></div>
+      <div class="scale-block"><p class="field-label-text">味道评分（全部可跳过）</p><div id="scaleRows"></div></div>
       <label class="field-label">杯标（盲测可选）<input id="blindLabel" placeholder="例如 A" maxlength="6" class="short-input"></label>
       <div class="feedback-tags" id="feedbackTags"><button type="button" data-taste="甜感好">甜感好</button><button type="button" data-taste="香气明显">香气明显</button><button type="button" data-taste="有果汁感">有果汁感</button><button type="button" data-taste="偏酸偏薄">偏酸偏薄</button><button type="button" data-taste="尾苦明显">尾苦明显</button><button type="button" data-taste="发干发涩">发干发涩</button></div>
       <label class="field-label">留一句给下一杯<textarea id="feedbackText" rows="3" maxlength="1000" placeholder="可以记下冷却后的味道、用水和养豆天数……"></textarea></label>

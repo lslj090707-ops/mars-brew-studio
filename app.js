@@ -9,7 +9,7 @@ let state={selected:'gesha-pure',configs:{},records:[],sound:true,timer:null,roa
 try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){if(DATA.recipes.some(r=>r.id===s.selected))state.selected=s.selected;if(s.configs&&typeof s.configs==='object')state.configs=s.configs;if(s.roast&&typeof s.roast==='object')state.roast=s.roast;if(Array.isArray(s.records))state.records=s.records.filter(validRecord).map(cleanRecord).slice(0,1000);state.sound=s.sound!==false;if(s.timer&&typeof s.timer==='object'&&Number.isFinite(s.timer.acc)&&s.timer.acc>=0&&s.timer.acc<=7200&&(s.timer.start===null||Number.isFinite(s.timer.start)))state.timer=s.timer;}}catch(e){}
 let storageWarning=false,audio=null,wake=null,pending=null,tags=new Set(),scale={},visibleFocus=true,onlyCurrent=false,toastTimeout,lastTick=-1,fired=new Set(),lastSaved=0;
 function validRecord(r){return r&&typeof r.id==='string'&&r.id.length<=100&&DATA.recipes.some(x=>x.id===r.recipe)&&Number.isFinite(r.dose)&&r.dose>=5&&r.dose<=45&&Number.isFinite(r.water)&&r.water>0&&r.water<=1200&&Number.isFinite(r.ice)&&r.ice>=0&&r.ice<=1200&&Number.isFinite(r.grind)&&r.grind>0&&r.grind<=9&&Number.isFinite(r.seconds)&&r.seconds>=0&&r.seconds<=7200&&typeof r.date==='string'&&Number.isFinite(Date.parse(r.date))&&(!r.tags||(Array.isArray(r.tags)&&r.tags.every(t=>typeof t==='string'&&t.length<=50)))&&(!r.note||(typeof r.note==='string'&&r.note.length<=1000));}
-function cleanRecord(r){const o={...r};delete o.factor;const T={};['sweet','acid','bitter','astringent','body','clean'].forEach(k=>{const v=r.taste&&r.taste[k];if(Number.isInteger(v)&&v>=1&&v<=5)T[k]=v;});if(Object.keys(T).length)o.taste=T;else delete o.taste;if(typeof o.next!=='string')delete o.next;else o.next=o.next.slice(0,400);['temp','blind','dripper'].forEach(k=>{if(typeof o[k]!=='string')delete o[k];else o[k]=o[k].slice(0,40);});return o;}
+function cleanRecord(r){const o={...r};delete o.factor;const T={};['sweet','acid','bitter','astringent','body','clean','qaroma','qflavor','qafter','qacid','qsweet','qmouth','qall'].forEach(k=>{const v=r.taste&&r.taste[k];if(Number.isInteger(v)&&v>=1&&v<=5)T[k]=v;});if(Object.keys(T).length)o.taste=T;else delete o.taste;if(typeof o.next!=='string')delete o.next;else o.next=o.next.slice(0,400);['temp','blind','dripper'].forEach(k=>{if(typeof o[k]!=='string')delete o[k];else o[k]=o[k].slice(0,40);});return o;}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){if(!storageWarning){storageWarning=true;toast('浏览器未能保存，请导出备份保留记录');}}}
 function toast(s){$('toast').textContent=s;$('toast').classList.add('visible');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>$('toast').classList.remove('visible'),3500);}
 function recipe(){return DATA.recipes.find(r=>r.id===state.selected);}
@@ -34,7 +34,7 @@ return out.sort((a,b)=>a.at-b.at);
 function render(){
 const r=recipe(),b=bean(),a=amounts(),m=mode(),locked=busy(),v=singleVerified();
 $('beans').innerHTML=DATA.beans.map(x=>'<button class="bean '+(x.id===r.bean?'active':'')+'" data-bean="'+x.id+'" aria-pressed="'+(x.id===r.bean)+'" '+(locked?'disabled':'')+'><span class="bean-glyph" aria-hidden="true"></span><b>'+esc(x.short)+'</b><small>'+esc(x.country||'')+'</small></button>').join('');
-$('recipeCount').textContent='五支豆，二十套方案，外加两杯新杯对比。从你已经喝到的好味道，继续往前。';
+$('recipeCount').textContent='五支豆，二十套方案，外加清庭平底对比杯和 v2 探索。从你已经喝到的好味道，继续往前。';
 $('allRecipesButton').textContent='查看全部参数与状态';
 $('recipeIndexTitle').textContent='二十套，分别校准。';
 $('modes').innerHTML=DATA.modes.filter(x=>!x.hidden).map(x=>'<button class="mode '+(x.id===r.mode?'active':'')+'" data-mode="'+x.id+'" aria-pressed="'+(x.id===r.mode)+'" '+(locked?'disabled':'')+'>'+esc(x.name)+'</button>').join('');
@@ -101,7 +101,7 @@ function releaseWake(){if(wake){wake.release().catch(()=>{});wake=null;}}
 function select(id){if(busy()){toast('完成或重置当前计时后，再切换配方');return;}if(DATA.recipes.some(r=>r.id===id)){state.selected=id;persist();render();}}
 document.addEventListener('click',function(e){
 const bb=e.target.closest('[data-bean]'),mm=e.target.closest('[data-mode]'),gg=e.target.closest('[data-grind]'),cl=e.target.closest('[data-close]'),rr=e.target.closest('[data-recipe]');
-if(bb)select(bb.dataset.bean+'-'+(recipe().mode.indexOf('cmp')===0?'pure':recipe().mode));
+if(bb)select(bb.dataset.bean+'-'+(recipe().mode.indexOf('cmp')===0||recipe().mode==='flat'?'pure':recipe().mode));
 if(mm)select(recipe().bean+'-'+mm.dataset.mode);
 if(gg&&!busy()){const c=config();c.grind=Math.round(clamp(c.grind+Number(gg.dataset.grind),.1,9)*10)/10;state.configs[state.selected]=c;persist();render();}
 if(cl)$(cl.dataset.close).close();
@@ -119,6 +119,8 @@ $('feedbackForm').onsubmit=e=>{e.preventDefault();if(!pending)return;const val=$
 function dripperName(r){return r.dripper==='qt'?'清庭 三旋空 山文平底杯 280 ml · NANO 莱赛尔高流速 185 蛋糕滤纸':'Hario Switch 03 · V60-03 滤纸';}
 function statusInfo(r){const s=r.status||{kind:'u',cups:0};return s.kind==='m'?{cls:'measured',text:'已实测（'+s.cups+' 杯）'}:s.kind==='p'?{cls:'tentative',text:'暂定'}:{cls:'untested',text:'未测试'};}
 function grindSub(r,a){const moved=Math.abs(a.grind-r.grind)>0.001;const pre=moved?'已改动 · ':'';
+ if(r.mode==='flat')return pre+'可选探索 · 只比 11-03 那杯细 0.2';
+ if(r.id==='gesha-cmp-qt')return pre+'11-03 已冲 · 干点 1:30 · 好喝';
  if(r.mode.indexOf('cmp')===0)return pre+'沿用瑰夏纯热 4.2 · 新杯未实测';
  if(r.id==='gesha-pure')return pre+'已实测 · 唯一实测的刻度';
  if(r.status.kind==='m')return pre+'已冲 '+r.status.cups+' 杯 · 手册基线 '+(r.baseline!=null?r.baseline.toFixed(1):'无');
@@ -135,9 +137,10 @@ function renderRest(){const b=bean(),i=restInfo(b);
  $('restRow').innerHTML=(i?'<span class="rest-chip '+i.tone+'">第 '+i.n+' 天</span><span class="rest-text">'+esc(i.txt)+'</span>':'<span class="rest-text">烘焙日期没有记录，填上就能看到养豆天数。</span>')+'<label class="rest-date">烘焙日<input type="date" id="roastInput" value="'+esc(roastOf(b.id))+'" max="'+todayStr()+'"></label>';}
 function renderToday(){const al=DATA.beans.find(x=>x.id==='alo-light'),i=restInfo(al);const chips=[];
  if(i)chips.push('<button class="today-chip '+i.tone+'" data-recipe-go="alo-light-pure"><span>Alo 浅焙</span><b>第 '+i.n+' 天</b><small>'+esc(i.txt)+'</small></button>');
- const cs=state.records.filter(x=>x.recipe==='gesha-cmp-sw').length,cq=state.records.filter(x=>x.recipe==='gesha-cmp-qt').length;
- chips.push('<button class="today-chip" data-jump="comparePanel"><span>新杯对比</span><b>'+(cs&&cq?'两杯都冲了':cs||cq?'冲了一杯':'待冲')+'</b><small>清庭平底到货 · 瑰夏 15 g / 248 g</small></button>');
- const m=DATA.recipes.filter(x=>x.mode.indexOf('cmp')!==0&&x.status.kind==='m').length;
+ const cs=state.records.filter(x=>x.recipe==='gesha-cmp-sw').length,cq=state.records.filter(x=>x.recipe==='gesha-cmp-qt').length+DATA.history.filter(x=>x.recipe==='gesha-cmp-qt').length;
+ chips.push('<button class="today-chip" data-jump="comparePanel"><span>新杯对比</span><b>'+(cs&&cq?'两杯都冲了':cs||cq?'冲了一杯':'待冲')+'</b><small>清庭平底 11-03 已冲一杯 · 干点 1:30</small></button>');
+ chips.push('<button class="today-chip" data-jump="notesPanel"><span>平底杯笔记</span><b>评杯与酸甜</b><small>评分标准和可选探索</small></button>');
+ const m=DATA.recipes.filter(x=>x.mode.indexOf('cmp')!==0&&x.mode!=='flat'&&x.status.kind==='m').length;
  chips.push('<button class="today-chip" id="todayAll"><span>已实测的方案</span><b>'+m+' / 20</b><small>其余是起点或暂定，见全部参数</small></button>');
  $('todayStrip').innerHTML='<p class="eyebrow">今日 · '+todayStr()+'</p><div class="today-grid">'+chips.join('')+'</div>';}
 function prevOf(rec){return state.records.find(x=>x.id!==rec.id&&x.recipe===rec.recipe&&Date.parse(x.date)<Date.parse(rec.date));}
@@ -152,28 +155,31 @@ function suggest(rec){
  const watery=T.body<=2&&T.sweet>=3&&!sour&&!bitter&&!dryT;
  const good=(T.sweet>=4||tg.includes('甜感好'))&&!bitter&&!dryT&&!sour;
  let act,why,alt='';const notes=[];
- if((dryT||bitter)&&ri&&ri.n<b.restDays[0]){act='参数不变，养豆后同参数复冲';why='这包豆才第 '+ri.n+' 天（'+ri.txt+'）。先别改研磨，也别只怪新鲜度，养到窗口再用相同参数冲一杯。';alt='复冲后仍然'+(dryT?'发干发涩':'苦')+'：下一杯只把 ZP6 '+f1(g)+' 改成 '+f1(g+0.2)+'。';}
+ if(T.qall>=4&&!dryT&&!bitter){act='参数不变，这一杯可以保留';why='整体印象已经是高分。只有想探索时才动：一次只改一项，例如 ZP6 '+f1(g)+' → '+f1(g-0.2)+'，和这杯同日对比。';alt='探索杯没有更好，就回到这一杯的参数。';}
+ else if((dryT||bitter)&&ri&&ri.n<b.restDays[0]){act='参数不变，养豆后同参数复冲';why='这包豆才第 '+ri.n+' 天（'+ri.txt+'）。先别改研磨，也别只怪新鲜度，养到窗口再用相同参数冲一杯。';alt='复冲后仍然'+(dryT?'发干发涩':'苦')+'：下一杯只把 ZP6 '+f1(g)+' 改成 '+f1(g+0.2)+'。';}
  else if(dryT){act='ZP6 '+f1(g)+' → '+f1(g+0.2)+'（调粗 0.2）';why='发干发涩多半是细粉或搅动过度，先调粗。结尾不要搅拌，也不要敲杯。涩的时候不要调细。';}
  else if(bitter){act='ZP6 '+f1(g)+' → '+f1(g+0.2)+'（调粗 0.2）';why='后段苦，按手册先调粗两格。';alt='再冲仍苦：下一个变量是水温，用 X-pro 设到 90°C，不要和研磨一起改。';}
  else if(sour){act='ZP6 '+f1(g)+' → '+f1(g-0.2)+'（调细 0.2）';why='酸尖、甜感不足，像萃取不够，按手册调细两格。';}
  else if(flat){act='ZP6 '+f1(g)+' → '+f1(g-0.2)+'（调细 0.2）';why='不甜、味道空，按手册调细两格。';}
  else if(watery){const nr=Math.round(rec.dose*(rec.water/rec.dose-1));act='热水 '+rec.water+' g → '+nr+' g（粉水比收紧 1）';why='酸甜是对的但偏薄，说明浓度低，只改粉水比，研磨不动。';}
  else if(good){act='参数不变，同参数再冲一杯';why='甜感好，苦和涩都不高。先确认能复现，再动下一项。';}
- else{act='参数不变，先补全六项评分';why='现有记录分辨不出问题。同参数再冲一杯，评分补全再决定改哪一项。';}
+ else{act='参数不变，先补全评分';why='现有记录分辨不出问题。同参数再冲一杯，评分补全再决定改哪一项。';}
  if(!r.noWindow&&r.window&&rec.seconds!=null&&Number.isFinite(rec.seconds)){if(rec.seconds>r.window[1]+30)notes.push('干点 '+clock(rec.seconds)+'，比估计窗口晚。窗口只是估计，不单独据此改参数。');else if(rec.seconds<r.window[0]-30)notes.push('干点 '+clock(rec.seconds)+'，比估计窗口早。窗口只是估计，不单独据此改参数。');}
  const p=prevOf(rec);if(p&&(p.grind!==rec.grind||p.dose!==rec.dose))notes.push('上一杯已经改过参数。这杯的味道先归因于那一项改动，再决定下一项。');
  return {act,why,alt,notes};}
 function makeNext(rec){const s=suggest(rec);return [s.act+'。',s.why,s.alt].filter(Boolean).join(' ');}
 function renderSuggest(){const r=recipe(),last=state.records.find(x=>x.recipe===r.id);let h='<p class="eyebrow">下一杯建议</p>';
  if(last){const s=suggest(last);h+='<span class="tag-suggest">建议</span><h3>'+esc(s.act)+'</h3><p>'+esc(s.why)+'</p>'+(s.alt?'<p class="sg-alt">'+esc(s.alt)+'</p>':'')+s.notes.map(n=>'<p class="sg-note">'+esc(n)+'</p>').join('')+'<small>依据你 '+esc(new Date(last.date).toLocaleDateString('zh-CN',{month:'numeric',day:'numeric'}))+' 的记录。规则来自冲煮手册，是建议，不是实测结论，一次只改一项。</small>';}
- else h+='<h3>先冲一杯，再给建议。</h3><p>冲完记下六项味道和真实干点，这里会按手册规则只建议改一个变量。</p>';
+ else h+='<h3>先冲一杯，再给建议。</h3><p>冲完记下味道评分和真实干点，这里会按手册规则只建议改一个变量。</p>';
  if(r.nextTest)h+='<div class="sg-plan"><span>计划中的下一杯</span><p>'+esc(r.nextTest)+'</p></div>';
  $('suggestCard').innerHTML=h;}
 const SCALES=[['sweet','甜感'],['acid','酸质'],['bitter','苦感'],['astringent','涩感 / 发干'],['body','厚度'],['clean','干净度']];
+const QSCALES=[['qaroma','香气'],['qflavor','风味'],['qafter','余韵'],['qacid','酸质'],['qsweet','甜感'],['qmouth','口感'],['qall','整体']];
+const ALLSC=SCALES.concat(QSCALES.map(([k,n])=>[k,'品质·'+n]));
 function scaleDots(t){return '<span class="dots">'+[1,2,3,4,5].map(i=>'<i'+(i<=t?' class="on"':'')+'></i>').join('')+'</span>';}
 function renderCompare(){
  const sw=DATA.recipes.find(x=>x.id==='gesha-cmp-sw'),qt=DATA.recipes.find(x=>x.id==='gesha-cmp-qt');
- const L=id=>state.records.find(x=>x.recipe===id),ls=L(sw.id),lq=L(qt.id);
+ const L=id=>state.records.find(x=>x.recipe===id)||DATA.history.find(x=>x.recipe===id),ls=L(sw.id),lq=L(qt.id);
  const row=(k,a,b)=>'<tr><th>'+k+'</th><td>'+a+'</td><td>'+b+'</td></tr>';
  let t='<table class="cmp-table"><thead><tr><th></th><th>Switch 03</th><th>清庭平底</th></tr></thead><tbody>'+
   row('滤杯','Hario Switch 03，360 ml','清庭 三旋空 山文平底杯，280 ml')+
@@ -184,16 +190,17 @@ function renderCompare(){
  t+='<table class="cmp-table cmp-result"><thead><tr><th>结果</th><th>Switch 03</th><th>清庭平底</th></tr></thead><tbody>'+
   row('干点',ls&&ls.seconds!=null?clock(ls.seconds):'未冲',lq&&lq.seconds!=null?clock(lq.seconds):'未冲');
  if(ls&&ls.blind||lq&&lq.blind)t+=row('杯标',esc((ls&&ls.blind)||'无'),esc((lq&&lq.blind)||'无'));
- SCALES.forEach(([k,n])=>{const a=ls&&ls.taste&&ls.taste[k],b=lq&&lq.taste&&lq.taste[k];if(a||b)t+=row(n,a?scaleDots(a):'未评',b?scaleDots(b):'未评');});
+ ALLSC.forEach(([k,n])=>{const a=ls&&ls.taste&&ls.taste[k],b=lq&&lq.taste&&lq.taste[k];if(a||b)t+=row(n,a?scaleDots(a):'未评',b?scaleDots(b):'未评');});
  if(ls&&ls.note||lq&&lq.note)t+=row('笔记',esc((ls&&ls.note)||''),esc((lq&&lq.note)||''));
  t+='</tbody></table>';
  let verdict='';
  if(ls&&lq){const bits=[];if(ls.seconds!=null&&lq.seconds!=null){const d=lq.seconds-ls.seconds;bits.push(d===0?'干点相同':'清庭干点比 Switch 03 '+(d>0?'晚':'早')+' '+Math.abs(d)+' 秒');}
-  SCALES.forEach(([k,n])=>{const a=ls.taste&&ls.taste[k],b=lq.taste&&lq.taste[k];if(a&&b&&a!==b)bits.push(n+' '+(b>a?'+':'−')+Math.abs(b-a));});
+  ALLSC.forEach(([k,n])=>{const a=ls.taste&&ls.taste[k],b=lq.taste&&lq.taste[k];if(a&&b&&a!==b)bits.push(n+' '+(b>a?'+':'−')+Math.abs(b-a));});
   verdict='<p class="cmp-verdict"><b>差别（清庭相对 Switch 03）：</b>'+esc(bits.length?bits.join('，'):'没有明显差别')+'。推断：这是“杯加滤纸”整套的差别，不能全算在杯型上。</p>';}
- else verdict='<p class="cmp-verdict muted">两杯都冲完以后，这里会列出干点和六项味道的差别。</p>';
- const notes=['<li><b>推断：</b>高流速莱赛尔纸可能让滤水更快、萃取更低。滤纸和 Switch 03 用的 V60-03 纸不同，所以比较的是“杯加纸”整套。</li>','<li><b>推断：</b>280 ml 的杯子做 18 g / 297 g 的浸泡式可能溢出，所以用 15 g / 248 g。实际容量还没核对。</li>','<li><b>盲测：</b>让别人把两杯倒进编号一样的杯子，你不看杯标打分，记录时填杯标，最后揭晓。60°C、40°C、室温各尝一次。</li>','<li><b>一次只比一个差别。</b>两杯的粉水、研磨、水温、注水节奏都不要动。</li>'];
- $('compareBody').innerHTML='<p class="cmp-lede">同一包瑰夏，同样的 15 g / 248 g、ZP6 4.2、沸水。这是暂定对比，还没有冲过。</p>'+t+verdict+'<div class="cmp-actions"><button class="start-btn" data-pick="gesha-cmp-sw">冲 Switch 03 这杯</button><button class="start-btn" data-pick="gesha-cmp-qt">冲清庭平底这杯</button></div><ul class="cmp-notes">'+notes.join('')+'</ul>';}
+ else verdict='<p class="cmp-verdict muted">两杯都冲完以后，这里会列出干点和评分的差别。</p>';
+ const notes=['<li><b>读法：</b>清庭这杯是好咖啡。花果香更清晰，酸甜苦平衡，只是甜感比 Switch 基线略低。差别可能来自萃取率或水流速度，没有测过，不要当成缺点。</li>','<li><b>推断：</b>高流速莱赛尔纸让滤水更快，所以干点 1:30 比普通平底杯早。滤纸和 Switch 03 的 V60-03 纸不同，比较的是“杯加纸”整套。</li>','<li><b>分段注水不会溢出。</b>只有关阀全浸泡，才要看 280 ml 的容量。</li>','<li><b>盲测：</b>让别人把两杯倒进编号一样的杯子，你不看杯标打分，记录时填杯标，最后揭晓。60°C、40°C、室温各尝一次。</li>','<li><b>一次只比一个差别。</b>粉水、研磨、水温、注水节奏，一次只动一项。</li>'];
+ const lede=lq?'<p class="cmp-lede">清庭平底 11-03 已冲一杯：干点 '+(lq.seconds!=null?clock(lq.seconds):'未计时')+'，花果香更清晰，整体平衡，甜感略低于 Switch。Switch 03 同参数那杯还没冲。</p>':'<p class="cmp-lede">同一包瑰夏，同样的 15 g / 248 g、ZP6 4.2、沸水。两杯都还没有冲。</p>';
+ $('compareBody').innerHTML=lede+t+verdict+'<div class="cmp-actions"><button class="start-btn" data-pick="gesha-cmp-sw">冲 Switch 03 这杯</button><button class="start-btn" data-pick="gesha-flat-v2">清庭 v2 · 可选探索 ZP6 4.0</button></div><ul class="cmp-notes">'+notes.join('')+'</ul>';}
 function renderGear(){$('gearBody').innerHTML='<dl class="gear-list">'+DATA.gear.map(g=>'<div><dt>'+esc(g[0])+'</dt><dd>'+esc(g[1])+'</dd></div>').join('')+'</dl>';}
 function renderRecords(){
  $('recordCount').textContent=state.records.length;const r0=recipe();
@@ -201,11 +208,11 @@ function renderRecords(){
  const mine=(onlyCurrent?state.records.filter(x=>x.recipe===r0.id):state.records).slice(0,30);
  const hist=DATA.history.filter(h=>!onlyCurrent||h.recipe===r0.id).map(h=>({...h,reference:true}));
  const list=mine.concat(hist);
- $('records').innerHTML=(!state.records.length?'<div class="empty-record">下一杯的进步，藏在这一杯的记录里。<small>完成计时后可以记下味道和六项评分。下面是你已有的历史实测。</small></div>':'')+(list.length?list.map(rec=>{const rr=DATA.recipes.find(x=>x.id===rec.recipe),bb=DATA.beans.find(x=>x.id===rr.bean),mm=DATA.modes.find(x=>x.id===rr.mode),dt=new Date(rec.date);
+ $('records').innerHTML=(!state.records.length?'<div class="empty-record">下一杯的进步，藏在这一杯的记录里。<small>完成计时后可以记下强度和品质印象评分。下面是你已有的历史实测。</small></div>':'')+(list.length?list.map(rec=>{const rr=DATA.recipes.find(x=>x.id===rec.recipe),bb=DATA.beans.find(x=>x.id===rr.bean),mm=DATA.modes.find(x=>x.id===rr.mode),dt=new Date(rec.date);
   const when=rec.reference?'<b>'+String(dt.getMonth()+1).padStart(2,'0')+'.'+String(dt.getDate()).padStart(2,'0')+'</b>历史实测'+(rec.dateNote?'<br>'+esc(rec.dateNote):''):'<b>'+String(dt.getMonth()+1).padStart(2,'0')+'.'+String(dt.getDate()).padStart(2,'0')+'</b>'+dt.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',hour12:false});
   const sec=Number.isFinite(rec.seconds)&&rec.seconds!=null?clock(rec.seconds):esc(rec.timeText||'未计时');
   const meta=[rec.dose+' g / '+rec.water+' g'+(rec.ice?' + 冰 '+rec.ice+' g':''),'ZP6 '+Number(rec.grind).toFixed(1)];if(rec.temp)meta.push(rec.temp);if(rec.dripper==='qt')meta.push('清庭平底');if(rec.blind)meta.push('杯标 '+rec.blind);
-  const sc=rec.taste?'<div class="rec-scale">'+SCALES.filter(([k])=>rec.taste[k]).map(([k,n])=>'<span>'+n+scaleDots(rec.taste[k])+'</span>').join('')+'</div>':'';
+  const sc=rec.taste?'<div class="rec-scale">'+ALLSC.filter(([k])=>rec.taste[k]).map(([k,n])=>'<span>'+n+scaleDots(rec.taste[k])+'</span>').join('')+'</div>':'';
   const df=rec.reference?'':diffText(rec);
   return '<article class="record'+(rec.reference?' reference':'')+'"><div class="record-date">'+when+'</div><div><h3>'+esc(bb.name)+' · '+esc(mm.name)+'</h3><div class="record-meta">'+esc(meta.join(' · '))+'</div>'+(rec.tags&&rec.tags.length?'<div class="record-tags">'+rec.tags.map(t=>'<span>'+esc(t)+'</span>').join('')+'</div>':'')+sc+(rec.note?'<p class="record-notes">'+esc(rec.note)+'</p>':'')+(df?'<p class="record-diff">'+esc(df)+'</p>':'')+(rec.next?'<p class="record-next"><b>建议</b>'+esc(rec.next)+'</p>':'')+'</div><div class="record-time">'+sec+'<small>'+(Number.isFinite(rec.seconds)&&rec.seconds!=null?'粉面积水消失':'没有精确计时')+'</small>'+(rec.reference?'':'<button class="record-del" data-del="'+esc(rec.id)+'">删除</button>')+'</div></article>';}).join(''):'<div class="empty-record">没有符合的记录。</div>');
 }
@@ -222,10 +229,10 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 window.addEventListener('pagehide',persist);
 setInterval(()=>{if(!state.timer||state.timer.start===null)return;const e=elapsed(),sec=Math.floor(e);if(sec!==lastTick){lastTick=sec;for(const item of events()){if(item.at===0)continue;for(const offset of [3,0]){const at=item.at-offset,key=item.at+'-'+offset;if(Math.abs(e-at)<.7&&!fired.has(key)){fired.add(key);beep(offset===0);}}}if(Date.now()-lastSaved>5000){persist();lastSaved=Date.now();}}updateTimer();if(e>=7200){state.timer.acc=7200;state.timer.start=null;persist();releaseWake();toast('计时已满 120 分钟，已暂停');}},250);
 
-$('scaleRows').innerHTML=SCALES.map(([k,n])=>'<div class="scale-row"><span>'+n+'</span><span class="scale-btns">'+[1,2,3,4,5].map(i=>'<button type="button" data-scale="'+k+'" data-v="'+i+'" aria-label="'+n+' '+i+'">'+i+'</button>').join('')+'</span></div>').join('');
+{const row=([k,n])=>'<div class="scale-row"><span>'+n+'</span><span class="scale-btns">'+[1,2,3,4,5].map(i=>'<button type="button" data-scale="'+k+'" data-v="'+i+'" aria-label="'+n+' '+i+'">'+i+'</button>').join('')+'</span></div>';$('scaleRows').innerHTML='<p class="scale-sub">强度：有多少（1 弱 5 强）</p>'+SCALES.map(row).join('')+'<p class="scale-sub">品质印象：好不好（1 低 5 高，参照 SCA CVA 和世界冲煮杯评分表）</p>'+QSCALES.map(row).join('')+'<p class="scale-sub small">酸质和甜感看品质，不看多少。整体包含平衡，冷却后也要再看一次。</p>';}
 document.addEventListener('click',e=>{
  const sc=e.target.closest('[data-scale]');if(sc){const k=sc.dataset.scale,v=Number(sc.dataset.v);if(scale[k]===v)delete scale[k];else scale[k]=v;document.querySelectorAll('[data-scale="'+k+'"]').forEach(x=>x.classList.toggle('on',Number(x.dataset.v)<=(scale[k]||0)));return;}
- const j=e.target.closest('[data-jump]');if(j){$(j.dataset.jump).scrollIntoView({behavior:'smooth'});return;}
+ const j=e.target.closest('[data-jump]');if(j){const t=$(j.dataset.jump);if(t.tagName==='DETAILS')t.open=true;t.scrollIntoView({behavior:'smooth'});return;}
  const g=e.target.closest('[data-recipe-go]');if(g){if(busy()){toast('请先完成或重置当前计时');return;}select(g.dataset.recipeGo);document.querySelector('.select-panel').scrollIntoView({behavior:'smooth'});return;}
  const pk=e.target.closest('[data-pick]');if(pk){if(busy()){toast('请先完成或重置当前计时');return;}select(pk.dataset.pick);window.scrollTo({top:0,behavior:'smooth'});toast('已选好，滑到计时卡开始');return;}
  const dl=e.target.closest('[data-del]');if(dl){if(confirm('删除这条记录？导出的备份不受影响。')){state.records=state.records.filter(x=>x.id!==dl.dataset.del);persist();render();toast('已删除');}return;}

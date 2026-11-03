@@ -402,3 +402,12 @@ dialog .muted{font-size:14.5px;margin-bottom:12px}
   body{background:#fff;color:#000;padding:0}.tabbar,.mini-bar,.toast,.masthead nav,.today-strip,.focus-card,.records-panel,.compare-panel,.gear-panel,footer,.suggest-card,.taste-card,.local-note,.fine-tune{display:none!important}
   .panel{box-shadow:none;border:1px solid #bbb;break-inside:avoid}
 }
+
+.scale-sub{font-size:13px;color:var(--ink2);font-weight:550;margin:14px 0 2px;line-height:1.5}
+.scale-sub.small{font-weight:400;color:var(--muted)}
+.notes-body{padding:0 0 18px;font-size:15px;line-height:1.65;color:var(--ink2)}
+.notes-body h3{font-size:16px;color:var(--ink);margin:16px 0 6px}
+.notes-body ul{list-style:none;display:flex;flex-direction:column;gap:6px;padding:0}
+.notes-body li{padding-left:16px;position:relative;font-size:14.5px}
+.notes-body li::before{content:"";position:absolute;left:0;top:.7em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.notes-body b{color:var(--ink)}
